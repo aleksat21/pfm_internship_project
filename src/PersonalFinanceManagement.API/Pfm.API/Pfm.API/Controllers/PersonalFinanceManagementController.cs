@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PersonalFinanceManagement.API.Entities;
+using PersonalFinanceManagement.API.Database.Entities;
+using PersonalFinanceManagement.API.Database.Entities.DTOs;
 
 namespace PersonalFinanceManagement.API.Controllers
 {
@@ -9,9 +10,14 @@ namespace PersonalFinanceManagement.API.Controllers
     {
         [HttpPost]
         [Route("transactions/import")]
-        public async Task<ActionResult<IEnumerable<Transaction>>> SaveCSV([FromBody]TransactionList transactions)
+        public async Task<IActionResult> SaveCSV([FromBody] CreateTransactionListDTO transactions)
         {
-            return Ok(transactions.Transactions);
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            return Ok();
         }
     }
 }

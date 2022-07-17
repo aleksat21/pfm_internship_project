@@ -1,12 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Net.Http.Headers;
 using System.Text;
-using PersonalFinanceManagement.API.Entities;
+using PersonalFinanceManagement.API.Database.Entities;
+using PersonalFinanceManagement.API.Database.Entities.DTOs;
+using CsvHelper;
+using System.Globalization;
 
 namespace PersonalFinanceManagement.API.Formatters
 {
+
     public class CSVInputFormatter : TextInputFormatter
     {
+        private static List<char> charsToRemove = new List<char>() { ',' };
+        private static string FilterString(string str, List<char> charsToRemove)
+        {
+            foreach (char c in charsToRemove)
+            {
+                str = str.Replace(c.ToString(), String.Empty);
+            }
+
+            return str;
+        }
+
         public CSVInputFormatter()
         {
             SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/csv"));
@@ -17,7 +32,7 @@ namespace PersonalFinanceManagement.API.Formatters
 
         protected override bool CanReadType(Type type)
         {
-            if (type == typeof(TransactionList))
+            if (type == typeof(CreateTransactionListDTO))
             {
                 return base.CanReadType(type);
             }
@@ -37,49 +52,58 @@ namespace PersonalFinanceManagement.API.Formatters
             }
 
             var request = context.HttpContext.Request;
-
             using var reader = new StreamReader(request.Body, encoding);
-            
-            // Remove header
-            string line = await reader.ReadLineAsync();
 
-            TransactionList transactionList = new TransactionList();
 
-            // TODO validate INPUT
-
-            while ((line = await reader.ReadLineAsync()) != null)
+            try
             {
-                var tokens = line.Split(",");
-
-                string id = tokens[0];
-                string beneficiaryName = tokens[1];
-                string date = tokens[2];
-                string direction = tokens[3];
-                double amount = 0.0; //double.Parse(tokens[4].Trim());
-                string description = tokens[5];
-                string currency = tokens[6];
-                string mcc = tokens[7];
-                string kind = tokens[8];
-                string catCode = "0";
-
-                Transaction t = new Transaction()
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
-                    Id = id.Trim(),
-                    BeneficiaryName = beneficiaryName.Trim(),
-                    Date = DateTime.Parse(date.Trim()),
-                    Direction = Enum.Parse<Direction>(direction.Trim()),
-                    Amount = amount,
-                    Description = description.Trim(),
-                    Currency = currency.Trim(),
-                    Mcc = mcc.Trim(),
-                    Kind = Enum.Parse<Kind>(kind.Trim()),
-                    Catcode = catCode
-                };
+                    CreateTransactionListDTO transactionList = new CreateTransactionListDTO();
+                    await csv.ReadAsync();
+                    csv.ReadHeader();
 
-                transactionList.Transactions.Add(t);
+                    //id,beneficiary-name,date,direction,amount,description,currency,mcc,kind
+
+                    while (await csv.ReadAsync())
+                    {
+                        string id = csv.GetField<string>("id").Trim();
+                        string beneficiaryName = csv.GetField<string>("beneficiary-name").Trim();
+                        string date = csv.GetField<string>("date").Trim();
+                        string direction = csv.GetField<string>("direction").Trim();
+
+                        string amount = csv.GetField<string>("amount").Trim();
+                        var parserAmount = FilterString(amount, charsToRemove);
+
+
+                        string description = csv.GetField<string>("description").Trim();
+                        string currency = csv.GetField<string>("currency").Trim();
+                        string mcc = csv.GetField<string>("mcc").Trim();
+                        string kind = csv.GetField<string>("kind").Trim();
+
+
+                        transactionList.Transactions.Add(new CreateTransactionDTO
+                        {
+                            Id = id,
+                            BeneficiaryName = beneficiaryName,
+                            Date = DateTime.Parse(date),
+                            Direction = Enum.Parse<Direction>(direction),
+                            Amount = double.Parse(amount),
+                            Description = description,
+                            Currency = currency,
+                            Mcc = mcc,
+                            Kind = Enum.Parse<Kind>(kind.Trim())
+                        });
+                    }
+
+                    return await InputFormatterResult.SuccessAsync(transactionList);
+
+                }
             }
-           
-            return await InputFormatterResult.SuccessAsync(transactionList);
-        }
+            catch
+            {
+                return await InputFormatterResult.FailureAsync();
+            }
+        }    
     }
 }

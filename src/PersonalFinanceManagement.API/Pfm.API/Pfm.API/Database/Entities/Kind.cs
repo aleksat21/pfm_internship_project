@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManagement.API.Entities
+﻿namespace PersonalFinanceManagement.API.Database.Entities
 {
     public enum Kind
     {

@@ -1,11 +1,13 @@
-﻿namespace PersonalFinanceManagement.API.Entities
+﻿using PersonalFinanceManagement.API.Database.Entities;
+
+namespace PersonalFinanceManagement.API.Models
 {
     public class Transaction
     {
         public string Id { get; set; }
 
         public string BeneficiaryName { get; set; }
-        
+
         public DateTime Date { get; set; }
 
         // enum
@@ -22,6 +24,5 @@
         public Kind Kind { get; set; }
 
         public string Catcode { get; set; }
-
     }
 }
