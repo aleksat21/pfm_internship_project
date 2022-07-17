@@ -10,12 +10,12 @@ namespace PersonalFinanceManagement.API.Controllers
     {
         [HttpPost]
         [Route("transactions/import")]
-        public async Task<IActionResult> SaveCSV([FromBody] CreateTransactionListDTO transactions)
+        public async Task<IActionResult> ImportTransactionsCSV([FromBody] CreateTransactionListDTO transactions)
         {
-            //if (!ModelState.IsValid)
-            //{
-            //    return BadRequest(ModelState);
-            //}
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
             return Ok();
         }

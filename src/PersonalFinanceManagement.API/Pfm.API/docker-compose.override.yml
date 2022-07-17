@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  financedb:
+    container_name: financedb
+    environment:
+      - SA_PASSWORD=ASSE12345678pfm
+      - ACCEPT_EULA=Y
+    restart: always
+    ports:
+      - "1433:1433"
+    volumes:
+      - financedb_data:/var/opt/mssql/data
+
+  personalfinancemanagement.api:
+    container_name: personalfinancemanagement.api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:OrderingConnectionString=Server=financedb;Database=FinanceDb;User Id=sa;Password=ASSE12345678pfm;"
+    depends_on:
+      - financedb
+    ports:
+      - "8001:80"

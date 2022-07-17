@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  financedb:
+    image: mcr.microsoft.com/mssql/server:2017-latest
+    
+  personalfinancemanagement.api:
+    image: ${DOCKER_REGISTRY-}personalfinancemanagementapi
+    build:
+      context: .
+      dockerfile: Pfm.API/Dockerfile
+
+volumes:
+  financedb_data:
