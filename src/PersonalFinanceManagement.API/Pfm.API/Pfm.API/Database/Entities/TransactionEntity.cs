@@ -8,7 +8,6 @@
 
         public DateTime Date { get; set; }
 
-        // enum
         public Direction Direction { get; set; }
 
         public double Amount { get; set; }

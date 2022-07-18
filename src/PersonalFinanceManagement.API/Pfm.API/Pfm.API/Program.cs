@@ -40,7 +40,8 @@ namespace PersonalFinanceManagement.API
 
             builder.Services.AddMvc(options =>
             {
-                options.InputFormatters.Insert(0, new CSVInputFormatter());
+                options.InputFormatters.Insert(0, new CSVInputTransactionFormatter());
+                options.InputFormatters.Insert(0, new CSVInputCategoryFormatter());
             });
 
             builder.Services.AddControllers().AddJsonOptions(options =>

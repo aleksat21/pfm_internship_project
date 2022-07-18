@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManagement.API.Database.Entities.DTOs
+﻿namespace PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions
 {
     public class CreateTransactionListDTO
     {

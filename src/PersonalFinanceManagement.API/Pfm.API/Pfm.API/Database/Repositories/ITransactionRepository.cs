@@ -1,5 +1,5 @@
 ﻿using PersonalFinanceManagement.API.Database.Entities;
-using PersonalFinanceManagement.API.Database.Entities.DTOs;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models;
 
 namespace PersonalFinanceManagement.API.Database.Repositories

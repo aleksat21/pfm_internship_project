@@ -2,14 +2,14 @@
 using Microsoft.Net.Http.Headers;
 using System.Text;
 using PersonalFinanceManagement.API.Database.Entities;
-using PersonalFinanceManagement.API.Database.Entities.DTOs;
 using CsvHelper;
 using System.Globalization;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 
 namespace PersonalFinanceManagement.API.Formatters
 {
 
-    public class CSVInputFormatter : TextInputFormatter
+    public class CSVInputTransactionFormatter : TextInputFormatter
     {
         private static List<char> charsToRemove = new List<char>() { ',' };
         private static string FilterString(string str, List<char> charsToRemove)
@@ -22,7 +22,7 @@ namespace PersonalFinanceManagement.API.Formatters
             return str;
         }
 
-        public CSVInputFormatter()
+        public CSVInputTransactionFormatter()
         {
             SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("application/csv"));
 
@@ -48,7 +48,6 @@ namespace PersonalFinanceManagement.API.Formatters
             if (encoding == null)
             {
                 throw new ArgumentNullException(nameof(encoding));
-
             }
 
             var request = context.HttpContext.Request;

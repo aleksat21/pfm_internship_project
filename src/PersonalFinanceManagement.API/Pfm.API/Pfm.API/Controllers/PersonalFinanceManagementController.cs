@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PersonalFinanceManagement.API.Database.Entities;
-using PersonalFinanceManagement.API.Database.Entities.DTOs;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models;
 using PersonalFinanceManagement.API.Services;
@@ -51,6 +52,14 @@ namespace PersonalFinanceManagement.API.Controllers
             var result = await _serviceTransactions.GetTransactions(startDate, endDate, transactionKind, page.Value, pageSize.Value, sortBy, sortOrder);
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("categories/import")]
+        public async Task<ActionResult<IEnumerable<CreateCategoryDTO>>> ImportCategoriesCSV([FromBody] CreateCategoryListDTO categories)
+        {
+            return categories.Categories;
+        }
+
 
     }
 }
