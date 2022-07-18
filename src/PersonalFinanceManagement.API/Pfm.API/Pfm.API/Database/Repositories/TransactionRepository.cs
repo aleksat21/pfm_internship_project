@@ -19,13 +19,13 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
         public async Task ImportTransactionsFromCSV(CreateTransactionListDTO transactions)
         {
-            _dbContext.Transactions.AddRange(_mapper.Map<IEnumerable<Transaction>>(transactions.Transactions));
+            _dbContext.Transactions.AddRange(_mapper.Map<IEnumerable<TransactionEntity>>(transactions.Transactions));
             await _dbContext.SaveChangesAsync();
         }
-        public async Task<PagedSortedList<Transaction>> GetTransactions(
+        public async Task<PagedSortedList<TransactionEntity>> GetTransactions(
             DateTime startDate,
             DateTime endDate,
-            Kind transactionKind = Kind.inc,
+            Kind transactionKind = Kind.pmt,
             int page = 1,
             int pageSize = 5,
             string sortBy = null,
@@ -98,7 +98,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
             var items = await query.ToListAsync();
 
-            return new PagedSortedList<Transaction>
+            return new PagedSortedList<TransactionEntity>
             {
                 Page = page,
                 PageSize = pageSize,

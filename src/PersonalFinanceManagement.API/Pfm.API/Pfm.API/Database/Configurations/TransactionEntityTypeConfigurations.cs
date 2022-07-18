@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PersonalFinanceManagement.API.Database.Entities;
-using PersonalFinanceManagement.API.Models;
 
 namespace PersonalFinanceManagement.API.Database.Configurations
 {
-    public class TransactionEntityTypeConfigurations : IEntityTypeConfiguration<Transaction>
+    public class TransactionEntityTypeConfigurations : IEntityTypeConfiguration<TransactionEntity>
     {
-        public void Configure(EntityTypeBuilder<Transaction> builder)
+        public void Configure(EntityTypeBuilder<TransactionEntity> builder)
         {
             builder.ToTable("transactions");
             builder.HasKey(t => t.Id);

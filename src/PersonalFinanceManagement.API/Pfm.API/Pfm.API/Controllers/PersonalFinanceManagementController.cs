@@ -3,6 +3,7 @@ using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs;
 using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Services;
 
 namespace PersonalFinanceManagement.API.Controllers
 {
@@ -10,13 +11,13 @@ namespace PersonalFinanceManagement.API.Controllers
     [Route("api/v1/[controller]")]
     public class PersonalFinanceManagementController : ControllerBase
     {
-        private readonly ITransactionRepository _repository;
         private readonly ILogger<PersonalFinanceManagementController> _logger;
+        private readonly ITransactionService _serviceTransactions;
 
-        public PersonalFinanceManagementController(ITransactionRepository repository, ILogger<PersonalFinanceManagementController> logger)
+        public PersonalFinanceManagementController(ILogger<PersonalFinanceManagementController> logger, ITransactionService serviceTransactions)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _serviceTransactions = serviceTransactions ?? throw new ArgumentNullException(nameof(serviceTransactions));
         }
 
         [HttpPost]
@@ -27,7 +28,7 @@ namespace PersonalFinanceManagement.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            await _repository.ImportTransactionsFromCSV(transactions);
+            await _serviceTransactions.ImportTransactionsFromCSV(transactions);
             
             return Ok();
         }
@@ -46,7 +47,8 @@ namespace PersonalFinanceManagement.API.Controllers
             page = page ?? 1;
             pageSize = pageSize ?? 10;
             _logger.LogInformation("Returning {page}. page of products", page);
-            var result = await _repository.GetTransactions(startDate, endDate, transactionKind, page.Value, pageSize.Value, sortBy, sortOrder);
+
+            var result = await _serviceTransactions.GetTransactions(startDate, endDate, transactionKind, page.Value, pageSize.Value, sortBy, sortOrder);
             return Ok(result);
         }
 
