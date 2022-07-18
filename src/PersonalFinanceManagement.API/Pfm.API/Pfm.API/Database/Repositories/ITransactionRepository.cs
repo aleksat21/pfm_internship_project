@@ -1,4 +1,5 @@
-﻿using PersonalFinanceManagement.API.Database.Entities.DTOs;
+﻿using PersonalFinanceManagement.API.Database.Entities;
+using PersonalFinanceManagement.API.Database.Entities.DTOs;
 using PersonalFinanceManagement.API.Models;
 
 namespace PersonalFinanceManagement.API.Database.Repositories
@@ -7,13 +8,13 @@ namespace PersonalFinanceManagement.API.Database.Repositories
     {
         Task ImportTransactionsFromCSV(CreateTransactionListDTO transactions);
 
-        Task<PagedSortedList<TransactionDTO>> GetTransactionsAsync(
-            DateTime startDate,
+        Task<PagedSortedList<Transaction>> GetTransactions(
+            DateTime dateTDate,
             DateTime endDate,
-            string transactionKind = null,
-            int page = 1,
+            Kind transactionKind = Kind.inc,
+            int page = 1, 
             int pageSize = 10,
-            string sortBy = null,
+            string sortBy = null, 
             SortOrder sortOrder = SortOrder.Asc);
     }
 }

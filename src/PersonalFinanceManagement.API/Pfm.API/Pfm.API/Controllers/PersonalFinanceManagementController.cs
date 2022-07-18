@@ -32,18 +32,23 @@ namespace PersonalFinanceManagement.API.Controllers
             return Ok();
         }
 
-        //public async Task<TransactionDTO> GetTransactionsAsync([FromQuery] string? transactionKind,
-        //                                                 [FromQuery] string? startDate,
-        //                                                 [FromQuery] string? endDate,
-        //                                                 [FromQuery] int? page,
-        //                                                 [FromQuery] int? pageSize,
-        //                                                 [FromQuery] string sortBy,
-        //                                                 [FromQuery] SortOrder sortOrder
-        //                                                 )
-        //{
-        //
-        //}
-
-
+        [HttpGet]
+        [Route("transactions")]
+        public async Task<IActionResult> GetTransactions(
+            [FromQuery] Kind transactionKind, 
+            [FromQuery] DateTime startDate, 
+            [FromQuery] DateTime endDate,
+            [FromQuery] int? page,
+            [FromQuery] int? pageSize,
+            [FromQuery] string? sortBy,
+            [FromQuery] SortOrder sortOrder)
+        {
+            page = page ?? 1;
+            pageSize = pageSize ?? 10;
+            _logger.LogInformation("Returning {page}. page of products", page);
+            var result = await _repository.GetTransactions(startDate, endDate, transactionKind, page.Value, pageSize.Value, sortBy, sortOrder);
+            return Ok(result);
         }
+
+    }
 }

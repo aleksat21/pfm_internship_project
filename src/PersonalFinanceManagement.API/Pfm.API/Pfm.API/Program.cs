@@ -34,6 +34,7 @@ namespace PersonalFinanceManagement.API
             builder.Services.AddAutoMapper(configuration =>
             {
                 configuration.CreateMap<CreateTransactionDTO, Transaction>().ReverseMap();
+                configuration.CreateMap<TransactionDTO, Transaction>().ReverseMap();
             });
 
             builder.Services.AddMvc(options =>

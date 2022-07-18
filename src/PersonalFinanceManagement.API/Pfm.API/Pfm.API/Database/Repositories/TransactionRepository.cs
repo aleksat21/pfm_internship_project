@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs;
 using PersonalFinanceManagement.API.Models;
 
@@ -21,14 +22,36 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             _dbContext.Transactions.AddRange(_mapper.Map<IEnumerable<Transaction>>(transactions.Transactions));
             await _dbContext.SaveChangesAsync();
         }
-
-        public async Task<PagedSortedList<TransactionDTO>> GetTransactionsAsync(DateTime startDate, DateTime endDate, string transactionKind = null, int page = 1, int pageSize = 10, string sortBy = null, SortOrder sortOrder = SortOrder.Asc)
+        public async Task<PagedSortedList<Transaction>> GetTransactions(
+            DateTime startDate,
+            DateTime endDate,
+            Kind transactionKind = Kind.inc,
+            int page = 1,
+            int pageSize = 5,
+            string sortBy = null,
+            SortOrder sortOrder = SortOrder.Asc
+        )
         {
             var query = _dbContext.Transactions.AsQueryable();
 
             var totalCount = query.Count();
 
             var totalPages = (int)Math.Ceiling(totalCount * 1.0 / pageSize);
+
+            if (transactionKind != null)
+            {
+                query = query.Where(x => x.Kind.Equals(transactionKind));
+            }
+
+            if (!startDate.Equals(DateTime.MinValue))
+            {
+                query = query.Where(x => x.Date >= startDate);
+            }
+
+            if (!endDate.Equals(DateTime.MinValue))
+            {
+                query = query.Where(x => x.Date <= endDate);
+            }
 
             if (!string.IsNullOrEmpty(sortBy))
             {
@@ -37,7 +60,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                     case "id":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
                         break;
-                    case "beneficiary_name":
+                    case "beneficiary-name":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.BeneficiaryName) : query.OrderByDescending(x => x.BeneficiaryName);
                         break;
                     case "date":
@@ -45,9 +68,6 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                         break;
                     case "direction":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Direction) : query.OrderByDescending(x => x.Direction);
-                        break;
-                    case "amount":
-                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Amount) : query.OrderByDescending(x => x.Amount);
                         break;
                     case "description":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Description) : query.OrderByDescending(x => x.Description);
@@ -64,31 +84,32 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                     case "catcode":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Catcode) : query.OrderByDescending(x => x.Catcode);
                         break;
+                    default:
+                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
+                        break;
                 }
             }
             else
             {
-                query.OrderBy(x => x.Id);
+                query = query.OrderBy(x => x.Id);
             }
 
             query = query.Skip((page - 1) * pageSize).Take(pageSize);
 
             var items = await query.ToListAsync();
 
-            //return new PagedSortedList<TransactionDTO>
-            //{
-            //    Page = page,
-            //    PageSize = pageSize,
-            //    TotalCount = totalCount,
-            //    TotalPages = totalPages,
-            //    Items = items,
-            //    SortBy = sortBy,
-            //    SortOrder = sortOrder
-            //};
-
-            // TODO
-            return new PagedSortedList<TransactionDTO>();
+            return new PagedSortedList<Transaction>
+            {
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = totalPages,
+                Items = items,
+                SortBy = sortBy,
+                SortOrder = sortOrder
+            };
         }
+
 
 
     }
