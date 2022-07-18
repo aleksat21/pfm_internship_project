@@ -17,7 +17,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
         public async Task ImportTransactionsFromCSV(CreateTransactionListDTO transactions)
         {
-            _dbContext.Transactions.AddRange(_mapper.Map<IEnumerable<Transaction>>(transactions));
+            _dbContext.Transactions.AddRange(_mapper.Map<IEnumerable<Transaction>>(transactions.Transactions));
             await _dbContext.SaveChangesAsync();
         }
     }
