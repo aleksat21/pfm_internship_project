@@ -60,9 +60,19 @@ namespace PersonalFinanceManagement.API
 
             app.UseAuthorization();
 
+            InitializeDatabase(app);
+
             app.MapControllers();
 
             app.Run();
+        }
+        private static void InitializeDatabase(WebApplication app)
+        {
+            if (app.Environment.IsDevelopment())
+            {
+                using var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
+                scope.ServiceProvider.GetRequiredService<TransactionsDbContext>().Database.Migrate();
+            }
         }
     }
 }
