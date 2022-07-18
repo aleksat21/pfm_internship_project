@@ -31,5 +31,19 @@ namespace PersonalFinanceManagement.API.Controllers
             
             return Ok();
         }
-    }
+
+        //public async Task<TransactionDTO> GetTransactionsAsync([FromQuery] string? transactionKind,
+        //                                                 [FromQuery] string? startDate,
+        //                                                 [FromQuery] string? endDate,
+        //                                                 [FromQuery] int? page,
+        //                                                 [FromQuery] int? pageSize,
+        //                                                 [FromQuery] string sortBy,
+        //                                                 [FromQuery] SortOrder sortOrder
+        //                                                 )
+        //{
+        //
+        //}
+
+
+        }
 }
