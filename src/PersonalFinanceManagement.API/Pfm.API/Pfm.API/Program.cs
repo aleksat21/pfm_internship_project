@@ -33,7 +33,7 @@ namespace PersonalFinanceManagement.API
 
             builder.Services.AddDbContext<TransactionsDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("TransactionConnectionString"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("TransactionConnectionString")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             });
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -41,7 +41,7 @@ namespace PersonalFinanceManagement.API
             builder.Services.AddMvc(options =>
             {
                 options.InputFormatters.Insert(0, new CSVInputTransactionFormatter());
-                options.InputFormatters.Insert(0, new CSVInputCategoryFormatter());
+                options.InputFormatters.Insert(1, new CSVInputCategoryFormatter());
             });
 
             builder.Services.AddControllers().AddJsonOptions(options =>
@@ -61,7 +61,7 @@ namespace PersonalFinanceManagement.API
 
             app.UseAuthorization();
 
-            InitializeDatabase(app);
+            //InitializeDatabase(app);
 
             app.MapControllers();
 

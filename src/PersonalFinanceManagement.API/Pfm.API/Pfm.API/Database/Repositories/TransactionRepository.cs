@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceManagement.API.Database.Entities;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models;
 
@@ -19,7 +20,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
         public async Task ImportTransactionsFromCSV(CreateTransactionListDTO transactions)
         {
-            _dbContext.Transactions.AddRange(_mapper.Map<IEnumerable<TransactionEntity>>(transactions.Transactions));
+            await _dbContext.Transactions.AddRangeAsync(_mapper.Map<IEnumerable<TransactionEntity>>(transactions.Transactions));
             await _dbContext.SaveChangesAsync();
         }
         public async Task<PagedSortedList<TransactionEntity>> GetTransactions(
@@ -110,7 +111,18 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             };
         }
 
-
-
+        public async Task ImportCategoriesFromCSV(CreateCategoryListDTO categories)
+        {
+            foreach (var category in categories.Categories)
+            {
+                var entity = _mapper.Map<CategoryEntity>(category);
+                if (_dbContext.Entry(entity).State == EntityState.Detached)
+                {
+                    _dbContext.Categories.Add(entity);
+                }
+                await _dbContext.SaveChangesAsync();
+            }
+            
+        }
     }
 }

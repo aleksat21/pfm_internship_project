@@ -10,5 +10,7 @@ namespace PersonalFinanceManagement.API.Database.Entities
         public string Name { get; set; }
 
         public string? ParentCode { get; set; }
+
+        public List<TransactionEntity> Transactions { get; set; }
     }
 }

@@ -55,9 +55,17 @@ namespace PersonalFinanceManagement.API.Controllers
 
         [HttpPost]
         [Route("categories/import")]
-        public async Task<ActionResult<IEnumerable<CreateCategoryDTO>>> ImportCategoriesCSV([FromBody] CreateCategoryListDTO categories)
+        public async Task<IActionResult> ImportCategoriesCSV([FromBody] CreateCategoryListDTO categories)
         {
-            return categories.Categories;
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _serviceTransactions.ImportCategoriesFromCSV(categories);
+
+            return Ok();
         }
 
 

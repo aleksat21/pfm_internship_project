@@ -21,5 +21,7 @@
         public Kind Kind { get; set; }
 
         public string? Catcode { get; set; }
+
+        public CategoryEntity Category { get; set; }
     }
 }

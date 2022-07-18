@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PersonalFinanceManagement.API.Database.Entities;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models;
@@ -34,5 +35,11 @@ namespace PersonalFinanceManagement.API.Services
         {
             await _transactionRepository.ImportTransactionsFromCSV(transactions);
         }
+
+        public async Task ImportCategoriesFromCSV(CreateCategoryListDTO categories)
+        {
+            await _transactionRepository.ImportCategoriesFromCSV(categories);
+        }
+
     }
 }

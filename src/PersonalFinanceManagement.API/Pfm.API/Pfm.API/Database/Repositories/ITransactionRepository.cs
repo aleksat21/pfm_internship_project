@@ -1,4 +1,5 @@
 ﻿using PersonalFinanceManagement.API.Database.Entities;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models;
 
@@ -16,5 +17,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             int pageSize = 10,
             string sortBy = null, 
             SortOrder sortOrder = SortOrder.Asc);
+
+        Task ImportCategoriesFromCSV(CreateCategoryListDTO categories); 
     }
 }
