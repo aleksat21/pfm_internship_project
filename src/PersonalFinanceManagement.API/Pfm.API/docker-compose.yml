@@ -7,8 +7,8 @@ services:
   personalfinancemanagement.api:
     image: ${DOCKER_REGISTRY-}personalfinancemanagementapi
     build:
-      context: .
-      dockerfile: Pfm.API/Dockerfile
+     context: .
+     dockerfile: Pfm.API/Dockerfile
 
 volumes:
   financedb_data:

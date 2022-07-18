@@ -21,9 +21,10 @@ namespace PersonalFinanceManagement.API.Database.Entities.DTOs
         public string? Description { get; set; }
 
         [Required]
+        [RegularExpression("[A-Za-z]{3}", ErrorMessage = "Currency must be from ISO 4271")]
         public string Currency { get; set; }
 
-        [RegularExpression("([0-9]{4}$)?", ErrorMessage = "Must be 4 digit code")]
+        [RegularExpression("([0-9]{4}$)?", ErrorMessage = "Mcc code must be 4 digit code")]
         public string? Mcc { get; set; }
 
         [Required]

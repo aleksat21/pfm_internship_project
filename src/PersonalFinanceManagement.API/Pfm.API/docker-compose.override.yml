@@ -16,7 +16,7 @@ services:
     container_name: personalfinancemanagement.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:OrderingConnectionString=Server=financedb;Database=FinanceDb;User Id=sa;Password=ASSE12345678pfm;"
+      - "ConnectionStrings:TransactionConnectionString=Server=financedb;Database=FinanceDb;User Id=sa;Password=ASSE12345678pfm;"
     depends_on:
       - financedb
     ports:

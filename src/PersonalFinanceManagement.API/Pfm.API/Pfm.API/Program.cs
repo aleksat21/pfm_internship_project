@@ -2,6 +2,12 @@ using PersonalFinanceManagement.API.Formatters;
 using Microsoft.Net.Http.Headers;
 using System.Text.Json.Serialization;
 using System.Text.Json;
+using PersonalFinanceManagement.API.Database.Entities.DTOs;
+using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Database;
+using Microsoft.EntityFrameworkCore;
+using PersonalFinanceManagement.API.Database.Repositories;
+using PersonalFinanceManagement.API.Extensions;
 
 namespace PersonalFinanceManagement.API
 {
@@ -17,6 +23,18 @@ namespace PersonalFinanceManagement.API
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+            builder.Services.AddDbContext<TransactionsDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("TransactionConnectionString"));
+            });
+
+            builder.Services.AddAutoMapper(configuration =>
+            {
+                configuration.CreateMap<CreateTransactionDTO, Transaction>().ReverseMap();
+            });
 
             builder.Services.AddMvc(options =>
             {

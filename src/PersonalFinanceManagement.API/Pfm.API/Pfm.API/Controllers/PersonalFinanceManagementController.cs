@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs;
+using PersonalFinanceManagement.API.Database.Repositories;
+using PersonalFinanceManagement.API.Models;
 
 namespace PersonalFinanceManagement.API.Controllers
 {
@@ -8,6 +10,15 @@ namespace PersonalFinanceManagement.API.Controllers
     [Route("api/v1/[controller]")]
     public class PersonalFinanceManagementController : ControllerBase
     {
+        private readonly ITransactionRepository _repository;
+        private readonly ILogger<PersonalFinanceManagementController> _logger;
+
+        public PersonalFinanceManagementController(ITransactionRepository repository, ILogger<PersonalFinanceManagementController> logger)
+        {
+            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        }
+
         [HttpPost]
         [Route("transactions/import")]
         public async Task<IActionResult> ImportTransactionsCSV([FromBody] CreateTransactionListDTO transactions)
@@ -16,7 +27,8 @@ namespace PersonalFinanceManagement.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            await _repository.ImportTransactionsFromCSV(transactions);
+            
             return Ok();
         }
     }
