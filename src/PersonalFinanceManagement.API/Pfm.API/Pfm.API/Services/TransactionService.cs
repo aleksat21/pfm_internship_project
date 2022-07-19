@@ -41,5 +41,16 @@ namespace PersonalFinanceManagement.API.Services
             await _transactionRepository.ImportCategoriesFromCSV(categories);
         }
 
+        public async Task<IEnumerable<Category>> GetCategories(string parentCode)
+        {
+            var result = await _transactionRepository.GetCategories(parentCode);
+
+            if (!result.Any())
+            {
+                return null;
+            }
+
+            return _mapper.Map<IEnumerable<Category>>(result);
+        }
     }
 }

@@ -124,5 +124,18 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             }
             
         }
+
+        public async Task<IEnumerable<CategoryEntity>> GetCategories(string parentCode)
+        {
+            var query = _dbContext.Categories.AsQueryable();
+
+            if (!string.IsNullOrEmpty(parentCode))
+            { 
+                query = query.Where(x => x.ParentCode == parentCode);
+            }
+
+            var items = await query.ToListAsync();
+            return items;
+        }
     }
 }

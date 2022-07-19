@@ -19,5 +19,7 @@ namespace PersonalFinanceManagement.API.Services
             SortOrder sortOrder = SortOrder.Asc);
 
         Task ImportCategoriesFromCSV(CreateCategoryListDTO categories);
+
+        Task<IEnumerable<Category>> GetCategories(string parentCode);
     }
 }

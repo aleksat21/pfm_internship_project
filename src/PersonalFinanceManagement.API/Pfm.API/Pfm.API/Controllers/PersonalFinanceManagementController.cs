@@ -68,6 +68,19 @@ namespace PersonalFinanceManagement.API.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [Route("categories")]
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories([FromQuery] string? parentId)
+        {
+            var result = await _serviceTransactions.GetCategories(parentId);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
+        }
+
 
     }
 }
