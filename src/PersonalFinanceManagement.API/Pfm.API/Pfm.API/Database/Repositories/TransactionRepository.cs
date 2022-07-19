@@ -111,18 +111,39 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             };
         }
 
+        //public async Task ImportCategoriesFromCSV(CreateCategoryListDTO categories)
+        //{
+        //    foreach (var category in categories.Categories)
+        //    {
+        //        var entity = _mapper.Map<CategoryEntity>(category);
+        //        if (_dbContext.Entry(entity).State == EntityState.Detached)
+        //        {
+        //            _dbContext.Categories.Add(entity);
+        //        }
+        //        await _dbContext.SaveChangesAsync();
+        //    }
+
+        //}
         public async Task ImportCategoriesFromCSV(CreateCategoryListDTO categories)
         {
             foreach (var category in categories.Categories)
             {
-                var entity = _mapper.Map<CategoryEntity>(category);
-                if (_dbContext.Entry(entity).State == EntityState.Detached)
+                var categoryEntity = await _dbContext.Categories.FindAsync(category.Code);
+
+                if (categoryEntity != null)
                 {
-                    _dbContext.Categories.Add(entity);
+                    categoryEntity.ParentCode = category.ParentCode;
+                    categoryEntity.Name = category.Name;
+
+                    _dbContext.Entry(categoryEntity).State = EntityState.Modified;
                 }
+                else
+                {
+                    await _dbContext.AddAsync(_mapper.Map<CategoryEntity>(category));
+                }
+
                 await _dbContext.SaveChangesAsync();
             }
-            
         }
 
         public async Task<IEnumerable<CategoryEntity>> GetCategories(string parentCode)
