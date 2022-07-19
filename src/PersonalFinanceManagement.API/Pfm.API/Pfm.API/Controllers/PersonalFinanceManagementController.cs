@@ -72,6 +72,7 @@ namespace PersonalFinanceManagement.API.Controllers
         [Route("categories")]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories([FromQuery] string? parentId)
         {
+
             var result = await _serviceTransactions.GetCategories(parentId);
 
             if (result == null)
@@ -94,6 +95,20 @@ namespace PersonalFinanceManagement.API.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        [Route("spending-analytics")]
+        public async Task<ActionResult<SpendingByCategory>> GetAnalytics(
+            [FromQuery] string? catCode,
+            [FromQuery] DateTime startDate,
+            [FromQuery] DateTime endDate,
+            [FromQuery] Direction? direction
+        )
+        {
+            var result = await _serviceTransactions.GetAnalytics(startDate, endDate, direction, catCode);
+            return Ok(result);
+        }
+
 
 
     }

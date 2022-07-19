@@ -11,6 +11,6 @@ namespace PersonalFinanceManagement.API.Database.Entities
 
         public string? ParentCode { get; set; }
 
-        public List<TransactionEntity> Transactions { get; set; }
+        public  ICollection<TransactionEntity> Transactions { get; set; }
     }
 }

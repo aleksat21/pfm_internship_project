@@ -23,6 +23,9 @@ namespace PersonalFinanceManagement.API.Database.Repositories
         Task<IEnumerable<CategoryEntity>> GetCategories(string parentCode);
 
         Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO);
-        
+
+        Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode);
+
+
     }
 }

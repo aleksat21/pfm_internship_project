@@ -14,7 +14,7 @@ namespace PersonalFinanceManagement.API.Extensions
 {
     public static class HostExtensions
     {
-        public static IHost MigrateDatabase<TContext>(this IHost host, Action<TContext, IServiceProvider> seeder) where TContext : DbContext
+        public static IHost MigrateDatabase<TContext>(this IHost host) where TContext : DbContext
         {
             using (var scope = host.Services.CreateScope())
             {
@@ -35,7 +35,7 @@ namespace PersonalFinanceManagement.API.Extensions
                             {
                                 logger.LogError($"Retry {retryCount} if {context.PolicyKey} at {context.OperationKey}, due to {exception}.");
                             });
-                    retry.Execute(() => InvokeSeeder(seeder, context, services));
+                    retry.Execute(() => InvokeSeeder(context, services));
 
                     logger.LogInformation("Migrating database associated with context {DbContextName} was successful", typeof(TContext).Name);
                 }
@@ -47,10 +47,9 @@ namespace PersonalFinanceManagement.API.Extensions
 
             return host;
         }
-        private static void InvokeSeeder<TContext>(Action<TContext, IServiceProvider> seeder, TContext context, IServiceProvider services) where TContext : DbContext
+        private static void InvokeSeeder<TContext>(TContext context, IServiceProvider services) where TContext : DbContext
         {
             context.Database.Migrate();
-            seeder(context, services);
         }
     }
 }

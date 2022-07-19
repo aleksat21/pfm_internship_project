@@ -59,5 +59,10 @@ namespace PersonalFinanceManagement.API.Services
 
             return result;
         }
+
+        public async Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode)
+        {
+            return await _transactionRepository.GetAnalytics(startDate, endDate, direction, catCode);
+        }
     }
 }

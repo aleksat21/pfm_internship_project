@@ -27,6 +27,7 @@ namespace PersonalFinanceManagement.API.Database
                 //.OnDelete(DeleteBehavior.Cascade)?
                 ;
 
+
             base.OnModelCreating(modelBuilder);
         }
     }

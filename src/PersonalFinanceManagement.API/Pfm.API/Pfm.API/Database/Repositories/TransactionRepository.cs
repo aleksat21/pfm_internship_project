@@ -111,19 +111,6 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             };
         }
 
-        //public async Task ImportCategoriesFromCSV(CreateCategoryListDTO categories)
-        //{
-        //    foreach (var category in categories.Categories)
-        //    {
-        //        var entity = _mapper.Map<CategoryEntity>(category);
-        //        if (_dbContext.Entry(entity).State == EntityState.Detached)
-        //        {
-        //            _dbContext.Categories.Add(entity);
-        //        }
-        //        await _dbContext.SaveChangesAsync();
-        //    }
-
-        //}
         public async Task ImportCategoriesFromCSV(CreateCategoryListDTO categories)
         {
             foreach (var category in categories.Categories)
@@ -180,6 +167,54 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             await _dbContext.SaveChangesAsync();
 
             return 1;
+        }
+
+        public async Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode)
+        {
+            var queryCategories = _dbContext.Categories.Include(cat => cat.Transactions).AsQueryable();
+
+            if (catCode != null)
+            {
+                queryCategories = queryCategories.Where(x => x.Code == catCode);
+            }
+
+            var categories = await queryCategories.ToListAsync();
+
+            var spendingByCategory = new SpendingByCategory();
+
+            foreach (var category in categories)
+            {
+                // HACK
+                var transaction = category.Transactions.Where(t => true);
+
+                if (!(startDate == DateTime.MinValue))
+                {
+                    transaction = transaction.Where(t => t.Date >= startDate);
+                }
+                if (!(endDate == DateTime.MinValue))
+                {
+                    transaction = transaction.Where(t => t.Date <= endDate);
+                }
+                if (direction.HasValue)
+                {
+                    transaction = transaction.Where(t => t.Direction == direction);
+                }
+
+                if (transaction.Count() == 0)
+                {
+                    continue;
+                }
+
+                spendingByCategory.groups.Add(
+                    new SpendingInCategory
+                    {
+                        Catcode = category.Code,
+                        Amount = transaction.Select(t => t.Amount).Sum(),
+                        Count = transaction.Count()
+                    }
+                );
+            }
+            return spendingByCategory; 
         }
     }
 }

@@ -12,8 +12,8 @@ using PersonalFinanceManagement.API.Database;
 namespace PersonalFinanceManagement.API.Migrations
 {
     [DbContext(typeof(TransactionsDbContext))]
-    [Migration("20220718201937_AddedCategoryTable")]
-    partial class AddedCategoryTable
+    [Migration("20220719173829_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

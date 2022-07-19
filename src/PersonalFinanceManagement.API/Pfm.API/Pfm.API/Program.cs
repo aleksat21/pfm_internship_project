@@ -33,7 +33,7 @@ namespace PersonalFinanceManagement.API
 
             builder.Services.AddDbContext<TransactionsDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("TransactionConnectionString")).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                options.UseSqlServer(builder.Configuration.GetConnectionString("TransactionConnectionString"));
             });
 
             builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
@@ -51,6 +51,7 @@ namespace PersonalFinanceManagement.API
             });
 
             var app = builder.Build();
+            //app.MigrateDatabase<TransactionsDbContext>();
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -61,19 +62,9 @@ namespace PersonalFinanceManagement.API
 
             app.UseAuthorization();
 
-            //InitializeDatabase(app);
-
             app.MapControllers();
 
             app.Run();
-        }
-        private static void InitializeDatabase(WebApplication app)
-        {
-            if (app.Environment.IsDevelopment())
-            {
-                using var scope = app.Services.GetService<IServiceScopeFactory>().CreateScope();
-                scope.ServiceProvider.GetRequiredService<TransactionsDbContext>().Database.Migrate();
-            }
         }
     }
 }

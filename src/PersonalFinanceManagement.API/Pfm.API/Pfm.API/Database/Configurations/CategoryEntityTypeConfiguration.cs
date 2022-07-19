@@ -19,7 +19,6 @@ namespace PersonalFinanceManagement.API.Database.Configurations
                 .IsRequired();
 
             builder.Property<string>("ParentCode");
-
         }
     }
 }
