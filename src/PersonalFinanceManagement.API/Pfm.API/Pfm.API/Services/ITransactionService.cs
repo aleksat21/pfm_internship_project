@@ -21,5 +21,7 @@ namespace PersonalFinanceManagement.API.Services
         Task ImportCategoriesFromCSV(CreateCategoryListDTO categories);
 
         Task<IEnumerable<Category>> GetCategories(string parentCode);
+
+        Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO);
     }
 }

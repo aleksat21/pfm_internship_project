@@ -52,5 +52,12 @@ namespace PersonalFinanceManagement.API.Services
 
             return _mapper.Map<IEnumerable<Category>>(result);
         }
+
+        public async Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO)
+        {
+            var result = await _transactionRepository.CategorizeTransaction(id, categorizeDTO);
+
+            return result;
+        }
     }
 }

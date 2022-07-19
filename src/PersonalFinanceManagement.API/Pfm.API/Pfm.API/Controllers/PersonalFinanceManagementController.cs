@@ -81,6 +81,20 @@ namespace PersonalFinanceManagement.API.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("transactions/{id}/categorize")]
+        public async Task<IActionResult> CategorizeTransaction([FromRoute] string id, [FromBody] CategorizeDTO category)
+        {
+            var result = await _serviceTransactions.CategorizeTransaction(id, category);
+
+            if (result == -1)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
+
 
     }
 }

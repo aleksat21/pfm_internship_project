@@ -137,5 +137,28 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             var items = await query.ToListAsync();
             return items;
         }
+
+        public async Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO)
+        {
+            // Mozda i ne mora ova provera zbog stranog kljuca koji je postavljen, vratiti se kasnije
+            var category = await _dbContext.Categories.FindAsync(categorizeDTO.Catcode);
+            if (category == null)
+            {
+                return -1;
+            }
+
+            var transaction = await _dbContext.Transactions.FindAsync(id);
+            if (transaction == null)
+            {
+                return -1;
+            }
+
+            transaction.Catcode = category.Code;
+
+            _dbContext.Entry(transaction).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
+
+            return 1;
+        }
     }
 }
