@@ -70,7 +70,7 @@ namespace PersonalFinanceManagement.API.Controllers
 
         [HttpGet]
         [Route("categories")]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories([FromQuery] string? parentId)
+        public async Task<ActionResult<CategoryList>> GetCategories([FromQuery] string? parentId)
         {
 
             var result = await _serviceTransactions.GetCategories(parentId);

@@ -133,7 +133,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             }
         }
 
-        public async Task<IEnumerable<CategoryEntity>> GetCategories(string parentCode)
+        public async Task<CategoryList> GetCategories(string parentCode)
         {
             var query = _dbContext.Categories.AsQueryable();
 
@@ -143,7 +143,10 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             }
 
             var items = await query.ToListAsync();
-            return items;
+            return new CategoryList
+            {
+                items = _mapper.Map<List<Category>>(items)
+            };
         }
 
         public async Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO)
