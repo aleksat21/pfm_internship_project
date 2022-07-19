@@ -187,23 +187,34 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
             foreach (var category in categories)
             {
-                // HACK
-                var transaction = category.Transactions.Where(t => true);
+                var categoryList = await _dbContext.Categories.Where(c => c.ParentCode == category.Code).Include(c => c.Transactions).ToListAsync();
+                categoryList.Add(category);
 
-                if (!(startDate == DateTime.MinValue))
-                {
-                    transaction = transaction.Where(t => t.Date >= startDate);
-                }
-                if (!(endDate == DateTime.MinValue))
-                {
-                    transaction = transaction.Where(t => t.Date <= endDate);
-                }
-                if (direction.HasValue)
-                {
-                    transaction = transaction.Where(t => t.Direction == direction);
-                }
+                var amount = 0.0;
+                var count = 0;
 
-                if (transaction.Count() == 0)
+                foreach(var cat in categoryList)
+                {
+                    var transactions = cat.Transactions.Where(t => true);
+
+                    if (!(startDate == DateTime.MinValue))
+                    {
+                        transactions = transactions.Where(t => t.Date >= startDate);
+                    }
+                    if (!(endDate == DateTime.MinValue))
+                    {
+                        transactions = transactions.Where(t => t.Date <= endDate);
+                    }
+                    if (direction.HasValue)
+                    {
+                        transactions = transactions.Where(t => t.Direction == direction);
+                    }
+
+                    amount += transactions.Select(t => t.Amount).Sum();
+                    count += transactions.Count();
+                }
+               
+                if (count == 0)
                 {
                     continue;
                 }
@@ -212,8 +223,8 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                     new SpendingInCategory
                     {
                         Catcode = category.Code,
-                        Amount = transaction.Select(t => t.Amount).Sum(),
-                        Count = transaction.Count()
+                        Amount = amount,
+                        Count = count
                     }
                 );
             }
