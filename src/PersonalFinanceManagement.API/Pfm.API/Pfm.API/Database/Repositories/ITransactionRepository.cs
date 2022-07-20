@@ -1,5 +1,6 @@
 ﻿using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models;
 
@@ -25,6 +26,8 @@ namespace PersonalFinanceManagement.API.Database.Repositories
         Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO);
 
         Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode);
+
+        Task<int> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand);
 
 
     }

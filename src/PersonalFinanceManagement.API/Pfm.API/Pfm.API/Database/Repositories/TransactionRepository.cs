@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models;
 
@@ -229,6 +230,53 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                 );
             }
             return spendingByCategory; 
+        }
+
+        public async Task<int> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand)
+        {
+            var queryTransactions = _dbContext.Transactions.Include(t => t.SplitTransactions).AsQueryable();
+
+            var transaction = queryTransactions.Where(t => t.Id == id).FirstOrDefault();
+
+            if (transaction == null)
+            {
+                return 404;
+            }
+
+            if (splitTransactionCommand.splits.Select(s => (int)s.Amount).Sum() != (int)transaction.Amount)
+            {
+                return 440;
+            }
+
+            var hasSplits = transaction.SplitTransactions.Count() > 0;
+
+            if (hasSplits)
+            {
+                var splitsToBeDeleted = await _dbContext.SplitTransactions.Where(st => st.Id == id).ToListAsync();
+                _dbContext.SplitTransactions.RemoveRange(splitsToBeDeleted);
+                await _dbContext.SaveChangesAsync();
+            }
+
+            foreach(var splitTransaction in splitTransactionCommand.splits)
+            {
+                await _dbContext.AddAsync(new SplitTransactionEntity
+                {
+                    Id = id,
+                    Catcode = splitTransaction.Catcode,
+                    Amount = splitTransaction.Amount
+                });
+            }
+
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            } catch (DbUpdateException dbException)
+            {
+                return 440;
+            }
+            
+
+            return 1;
         }
     }
 }

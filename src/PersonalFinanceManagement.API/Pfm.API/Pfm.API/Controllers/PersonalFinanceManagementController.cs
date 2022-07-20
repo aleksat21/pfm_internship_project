@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models;
@@ -109,6 +110,25 @@ namespace PersonalFinanceManagement.API.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        [Route("transaction/{id}/split")]
+        public async Task<ActionResult<int>> SplitTransaction([FromRoute] string id, [FromBody] SplitTransactionCommand splitTransactionCommand)
+        {
+            var result = await _serviceTransactions.SplitTransaction(id, splitTransactionCommand);
+
+            if (result == 404)
+            {
+                return NotFound();
+            }
+
+            if (result == 440)
+            {
+                // TODO FIX ERROR HANDLING
+                return BadRequest();
+            }
+
+            return Ok();
+        }
 
 
     }

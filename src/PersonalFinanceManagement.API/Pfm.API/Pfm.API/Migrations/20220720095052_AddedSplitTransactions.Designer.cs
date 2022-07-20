@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PersonalFinanceManagement.API.Database;
 
@@ -11,9 +12,10 @@ using PersonalFinanceManagement.API.Database;
 namespace PersonalFinanceManagement.API.Migrations
 {
     [DbContext(typeof(TransactionsDbContext))]
-    partial class TransactionsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220720095052_AddedSplitTransactions")]
+    partial class AddedSplitTransactions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,8 +54,6 @@ namespace PersonalFinanceManagement.API.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id", "Catcode", "Amount");
-
-                    b.HasIndex("Catcode");
 
                     b.ToTable("SplitTransactions", (string)null);
                 });
@@ -105,21 +105,13 @@ namespace PersonalFinanceManagement.API.Migrations
 
             modelBuilder.Entity("PersonalFinanceManagement.API.Database.Entities.SplitTransactionEntity", b =>
                 {
-                    b.HasOne("PersonalFinanceManagement.API.Database.Entities.CategoryEntity", "Category")
-                        .WithMany("SplitTransactions")
-                        .HasForeignKey("Catcode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("PersonalFinanceManagement.API.Database.Entities.TransactionEntity", "Transaction")
+                    b.HasOne("PersonalFinanceManagement.API.Database.Entities.TransactionEntity", "transaction")
                         .WithMany("SplitTransactions")
                         .HasForeignKey("Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-
-                    b.Navigation("Transaction");
+                    b.Navigation("transaction");
                 });
 
             modelBuilder.Entity("PersonalFinanceManagement.API.Database.Entities.TransactionEntity", b =>
@@ -133,8 +125,6 @@ namespace PersonalFinanceManagement.API.Migrations
 
             modelBuilder.Entity("PersonalFinanceManagement.API.Database.Entities.CategoryEntity", b =>
                 {
-                    b.Navigation("SplitTransactions");
-
                     b.Navigation("Transactions");
                 });
 

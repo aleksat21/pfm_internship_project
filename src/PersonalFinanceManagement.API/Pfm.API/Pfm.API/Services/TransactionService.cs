@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models;
@@ -63,6 +64,13 @@ namespace PersonalFinanceManagement.API.Services
         public async Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode)
         {
             return await _transactionRepository.GetAnalytics(startDate, endDate, direction, catCode);
+        }
+
+        public async Task<int> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand)
+        {
+            var result = await _transactionRepository.SplitTransaction(id, splitTransactionCommand);
+
+            return result;
         }
     }
 }

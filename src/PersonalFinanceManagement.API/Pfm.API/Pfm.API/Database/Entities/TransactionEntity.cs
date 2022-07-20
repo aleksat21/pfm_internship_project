@@ -23,5 +23,7 @@
         public string? Catcode { get; set; }
 
         public CategoryEntity Category { get; set; }
+
+        public ICollection<SplitTransactionEntity> SplitTransactions { get; set; }
     }
 }

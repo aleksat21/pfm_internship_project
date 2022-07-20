@@ -1,5 +1,6 @@
 ﻿using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
+using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models;
 
@@ -29,5 +30,7 @@ namespace PersonalFinanceManagement.API.Services
             DateTime endDate,
             Direction? direction,
             string? catCode);
+
+        Task<int> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand);
     }
 }
