@@ -5,6 +5,7 @@ using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.ExceptionHandling;
 using PersonalFinanceManagement.API.Models.Exceptions.DomainExceptions;
 
 namespace PersonalFinanceManagement.API.Services
@@ -20,16 +21,17 @@ namespace PersonalFinanceManagement.API.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<PagedSortedList<Transaction>> GetTransactions(DateTime dateTDate,
+        public async Task<PagedSortedList<Transaction>> GetTransactions(
+            DateTime startDate,
             DateTime endDate,
-            Kind transactionKind = Kind.pmt,
-            int page = 1,
-            int pageSize = 10,
-            string sortBy = null,
-            SortOrder sortOrder = SortOrder.Asc
+            Kind? transactionKind,
+            int? page,
+            int? pageSize,
+            string? sortBy,
+            SortOrder? sortOrder
         )
         {
-            var result = await _transactionRepository.GetTransactions(dateTDate, endDate, transactionKind, page, pageSize, sortBy, sortOrder);
+            var result = await _transactionRepository.GetTransactions(startDate, endDate, transactionKind, page, pageSize, sortBy, sortOrder);
             return _mapper.Map<PagedSortedList<Transaction>>(result);
         }
 
@@ -45,21 +47,22 @@ namespace PersonalFinanceManagement.API.Services
 
         public async Task<CategoryList> GetCategories(string parentCode)
         {
-            var result = await _transactionRepository.GetCategories(parentCode);
-
-            if (!result.items.Any())
-            {
-                return null;
-            }
-
-            return result;
+            return await _transactionRepository.GetCategories(parentCode);
         }
 
-        public async Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO)
+        public async Task CategorizeTransaction(string id, CategorizeDTO categorizeDTO)
         {
             var result = await _transactionRepository.CategorizeTransaction(id, categorizeDTO);
-
-            return result;
+            
+            switch (result)
+            {
+                case ErrorHandling.CATEGORY_DOESNT_EXIST:
+                    throw new CategoryNotFoundException(null);
+                case ErrorHandling.TRANSACTION_DOESNT_EXIST:
+                    throw new TransactionNotFoundException(id);
+                default:
+                    break;
+            }
         }
 
         public async Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode)

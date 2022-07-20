@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace PersonalFinanceManagement.API.Models
+namespace PersonalFinanceManagement.API.Models.ExceptionHandling
 {
     public class ErrorDetails
     {

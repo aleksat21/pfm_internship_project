@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using PersonalFinanceManagement.API.CustomExceptionMiddleware;
 using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.ExceptionHandling;
 using System.Net;
 
 namespace PersonalFinanceManagement.API.Extensions

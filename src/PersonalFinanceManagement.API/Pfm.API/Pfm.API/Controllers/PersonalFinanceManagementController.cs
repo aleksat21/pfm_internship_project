@@ -38,19 +38,19 @@ namespace PersonalFinanceManagement.API.Controllers
         [HttpGet]
         [Route("transactions")]
         public async Task<IActionResult> GetTransactions(
-            [FromQuery] Kind transactionKind, 
+            [FromQuery] Kind? transactionKind, 
             [FromQuery] DateTime startDate, 
             [FromQuery] DateTime endDate,
             [FromQuery] int? page,
             [FromQuery] int? pageSize,
             [FromQuery] string? sortBy,
-            [FromQuery] SortOrder sortOrder)
+            [FromQuery] SortOrder? sortOrder)
         {
             page = page ?? 1;
             pageSize = pageSize ?? 10;
             _logger.LogInformation("Returning {page}. page of products", page);
 
-            var result = await _serviceTransactions.GetTransactions(startDate, endDate, transactionKind, page.Value, pageSize.Value, sortBy, sortOrder);
+            var result = await _serviceTransactions.GetTransactions(startDate, endDate, transactionKind, page, pageSize, sortBy, sortOrder);
             return Ok(result);
         }
 
@@ -73,13 +73,7 @@ namespace PersonalFinanceManagement.API.Controllers
         [Route("categories")]
         public async Task<ActionResult<CategoryList>> GetCategories([FromQuery] string? parentId)
         {
-
             var result = await _serviceTransactions.GetCategories(parentId);
-
-            if (result == null)
-            {
-                return NotFound();
-            }
             return Ok(result);
         }
 
@@ -87,12 +81,7 @@ namespace PersonalFinanceManagement.API.Controllers
         [Route("transactions/{id}/categorize")]
         public async Task<IActionResult> CategorizeTransaction([FromRoute] string id, [FromBody] CategorizeDTO category)
         {
-            var result = await _serviceTransactions.CategorizeTransaction(id, category);
-
-            if (result == -1)
-            {
-                return NotFound();
-            }
+            await _serviceTransactions.CategorizeTransaction(id, category);
 
             return Ok();
         }

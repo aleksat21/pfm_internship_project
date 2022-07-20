@@ -11,19 +11,19 @@ namespace PersonalFinanceManagement.API.Services
         Task ImportTransactionsFromCSV(CreateTransactionListDTO transactions);
 
         Task<PagedSortedList<Transaction>> GetTransactions(
-            DateTime dateTDate,
+            DateTime startDate,
             DateTime endDate,
-            Kind transactionKind = Kind.pmt,
-            int page = 1,
-            int pageSize = 10,
-            string sortBy = null,
-            SortOrder sortOrder = SortOrder.Asc);
+            Kind? transactionKind,
+            int? page,
+            int? pageSize ,
+            string? sortBy,
+            SortOrder? sortOrder);
 
         Task ImportCategoriesFromCSV(CreateCategoryListDTO categories);
 
         Task<CategoryList> GetCategories(string parentCode);
 
-        Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO);
+        Task CategorizeTransaction(string id, CategorizeDTO categorizeDTO);
 
         Task<SpendingByCategory> GetAnalytics(
             DateTime startDate,

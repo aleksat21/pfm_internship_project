@@ -19,7 +19,5 @@
         public string Mcc { get; set; }
 
         public Kind Kind { get; set; }
-
-        public string Catcode { get; set; }
     }
 }

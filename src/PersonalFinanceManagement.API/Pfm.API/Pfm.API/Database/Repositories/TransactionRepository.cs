@@ -5,6 +5,7 @@ using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.ExceptionHandling;
 
 namespace PersonalFinanceManagement.API.Database.Repositories
 {
@@ -27,30 +28,28 @@ namespace PersonalFinanceManagement.API.Database.Repositories
         public async Task<PagedSortedList<TransactionEntity>> GetTransactions(
             DateTime startDate,
             DateTime endDate,
-            Kind transactionKind = Kind.pmt,
-            int page = 1,
-            int pageSize = 5,
-            string sortBy = null,
-            SortOrder sortOrder = SortOrder.Asc
+            Kind? transactionKind,
+            int? page,
+            int? pageSize,
+            string? sortBy,
+            SortOrder? sortOrder = SortOrder.Asc
         )
         {
             var query = _dbContext.Transactions.AsQueryable();
 
             var totalCount = query.Count();
 
-            var totalPages = (int)Math.Ceiling(totalCount * 1.0 / pageSize);
-
             if (transactionKind != null)
             {
                 query = query.Where(x => x.Kind.Equals(transactionKind));
             }
 
-            if (!startDate.Equals(DateTime.MinValue))
+            if (startDate != DateTime.MinValue)
             {
                 query = query.Where(x => x.Date >= startDate);
             }
 
-            if (!endDate.Equals(DateTime.MinValue))
+            if (endDate != DateTime.MinValue)
             {
                 query = query.Where(x => x.Date <= endDate);
             }
@@ -71,6 +70,9 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                     case "direction":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Direction) : query.OrderByDescending(x => x.Direction);
                         break;
+                    case "amount":
+                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Amount) : query.OrderByDescending(x => x.Amount);
+                        break;
                     case "description":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Description) : query.OrderByDescending(x => x.Description);
                         break;
@@ -87,28 +89,27 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Catcode) : query.OrderByDescending(x => x.Catcode);
                         break;
                     default:
-                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Id);
+                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Date);
                         break;
                 }
             }
             else
             {
-                query = query.OrderBy(x => x.Id);
+                query = query.OrderBy(x => x.Date);
             }
 
-            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+            query = query.Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value);
 
             var items = await query.ToListAsync();
 
             return new PagedSortedList<TransactionEntity>
             {
-                Page = page,
-                PageSize = pageSize,
+                Page = page.Value,
+                PageSize = pageSize.Value,
                 TotalCount = totalCount,
-                TotalPages = totalPages,
+                SortBy = sortBy ?? "date",
+                SortOrder = sortOrder ?? SortOrder.Asc,
                 Items = items,
-                SortBy = sortBy,
-                SortOrder = sortOrder
             };
         }
 
@@ -150,19 +151,18 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             };
         }
 
-        public async Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO)
+        public async Task<ErrorHandling> CategorizeTransaction(string id, CategorizeDTO categorizeDTO)
         {
-            // Mozda i ne mora ova provera zbog stranog kljuca koji je postavljen, vratiti se kasnije
             var category = await _dbContext.Categories.FindAsync(categorizeDTO.Catcode);
             if (category == null)
             {
-                return -1;
+                return ErrorHandling.CATEGORY_DOESNT_EXIST;
             }
 
             var transaction = await _dbContext.Transactions.FindAsync(id);
             if (transaction == null)
             {
-                return -1;
+                return ErrorHandling.TRANSACTION_DOESNT_EXIST;
             }
 
             transaction.Catcode = category.Code;
@@ -170,7 +170,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             _dbContext.Entry(transaction).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
-            return 1;
+            return ErrorHandling.OK;
         }
 
         public async Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode)

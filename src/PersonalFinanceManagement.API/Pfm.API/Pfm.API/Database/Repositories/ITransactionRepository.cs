@@ -3,6 +3,7 @@ using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.ExceptionHandling;
 
 namespace PersonalFinanceManagement.API.Database.Repositories
 {
@@ -13,17 +14,17 @@ namespace PersonalFinanceManagement.API.Database.Repositories
         Task<PagedSortedList<TransactionEntity>> GetTransactions(
             DateTime dateTDate,
             DateTime endDate,
-            Kind transactionKind = Kind.pmt,
-            int page = 1, 
-            int pageSize = 10,
-            string sortBy = null, 
-            SortOrder sortOrder = SortOrder.Asc);
+            Kind? transactionKind,
+            int? page, 
+            int? pageSize,
+            string? sortBy, 
+            SortOrder? sortOrder);
 
         Task ImportCategoriesFromCSV(CreateCategoryListDTO categories);
 
         Task<CategoryList> GetCategories(string parentCode);
 
-        Task<int> CategorizeTransaction(string id, CategorizeDTO categorizeDTO);
+        Task<ErrorHandling> CategorizeTransaction(string id, CategorizeDTO categorizeDTO);
 
         Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode);
 
