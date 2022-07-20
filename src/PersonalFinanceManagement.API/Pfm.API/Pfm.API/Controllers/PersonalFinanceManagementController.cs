@@ -112,21 +112,9 @@ namespace PersonalFinanceManagement.API.Controllers
 
         [HttpPost]
         [Route("transaction/{id}/split")]
-        public async Task<ActionResult<int>> SplitTransaction([FromRoute] string id, [FromBody] SplitTransactionCommand splitTransactionCommand)
+        public async Task<IActionResult> SplitTransaction([FromRoute] string id, [FromBody] SplitTransactionCommand splitTransactionCommand)
         {
-            var result = await _serviceTransactions.SplitTransaction(id, splitTransactionCommand);
-
-            if (result == 404)
-            {
-                return NotFound();
-            }
-
-            if (result == 440)
-            {
-                // TODO FIX ERROR HANDLING
-                return BadRequest();
-            }
-
+            await _serviceTransactions.SplitTransaction(id, splitTransactionCommand);
             return Ok();
         }
 

@@ -5,6 +5,7 @@ using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.Exceptions.DomainExceptions;
 
 namespace PersonalFinanceManagement.API.Services
 {
@@ -66,11 +67,21 @@ namespace PersonalFinanceManagement.API.Services
             return await _transactionRepository.GetAnalytics(startDate, endDate, direction, catCode);
         }
 
-        public async Task<int> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand)
+        public async Task SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand)
         {
             var result = await _transactionRepository.SplitTransaction(id, splitTransactionCommand);
 
-            return result;
+            switch (result)
+            {
+                case ErrorHandling.CATEGORY_DOESNT_EXIST:
+                    throw new CategoryNotFoundException(null);
+                case ErrorHandling.TRANSACTION_DOESNT_EXIST:
+                    throw new TransactionNotFoundException(id);
+                case ErrorHandling.SPLIT_AMOUNT_OVER_LIMIT:
+                    throw new SplitTransactionOverLimitException(splitTransactionCommand.splits.Select(s => s.Amount).Sum());
+                default:
+                    break;
+            }
         }
     }
 }

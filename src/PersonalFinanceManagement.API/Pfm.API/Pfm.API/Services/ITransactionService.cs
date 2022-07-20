@@ -31,6 +31,6 @@ namespace PersonalFinanceManagement.API.Services
             Direction? direction,
             string? catCode);
 
-        Task<int> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand);
+        Task SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand);
     }
 }

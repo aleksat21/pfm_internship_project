@@ -232,7 +232,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             return spendingByCategory; 
         }
 
-        public async Task<int> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand)
+        public async Task<ErrorHandling> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand)
         {
             var queryTransactions = _dbContext.Transactions.Include(t => t.SplitTransactions).AsQueryable();
 
@@ -240,12 +240,14 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
             if (transaction == null)
             {
-                return 404;
+                // Transaction Not Found
+                return ErrorHandling.TRANSACTION_DOESNT_EXIST;
             }
 
             if (splitTransactionCommand.splits.Select(s => (int)s.Amount).Sum() != (int)transaction.Amount)
             {
-                return 440;
+                // Bussiness logic , transaction over amount
+                return ErrorHandling.SPLIT_AMOUNT_OVER_LIMIT;
             }
 
             var hasSplits = transaction.SplitTransactions.Count() > 0;
@@ -272,11 +274,11 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                 await _dbContext.SaveChangesAsync();
             } catch (DbUpdateException dbException)
             {
-                return 440;
+                return ErrorHandling.CATEGORY_DOESNT_EXIST;
             }
             
 
-            return 1;
+            return ErrorHandling.OK;
         }
     }
 }

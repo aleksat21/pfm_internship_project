@@ -12,6 +12,7 @@ using System.Reflection;
 using PersonalFinanceManagement.API.Services;
 using AutoMapper;
 using PersonalFinanceManagement.API.Mappings;
+using PersonalFinanceManagement.API.CustomExceptionMiddleware;
 
 namespace PersonalFinanceManagement.API
 {
@@ -30,6 +31,8 @@ namespace PersonalFinanceManagement.API
 
             builder.Services.AddScoped<ITransactionService, TransactionService>();
             builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+
+            builder.Services.AddTransient<ExceptionMiddleware>();
 
             builder.Services.AddDbContext<TransactionsDbContext>(options =>
             {
@@ -51,7 +54,10 @@ namespace PersonalFinanceManagement.API
             });
 
             var app = builder.Build();
+
+            app.UseMiddleware<ExceptionMiddleware>();
             //app.MigrateDatabase<TransactionsDbContext>();
+
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
