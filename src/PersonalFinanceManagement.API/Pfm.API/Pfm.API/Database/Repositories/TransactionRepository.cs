@@ -165,6 +165,14 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                 return ErrorHandling.TRANSACTION_DOESNT_EXIST;
             }
 
+            // Nacin da se uklone splitovane transakcije
+            if (transaction.Catcode == "Z")
+            {
+                var splitsToBeDeleted = await _dbContext.SplitTransactions.Where(st => st.Id == id).ToListAsync();
+                _dbContext.SplitTransactions.RemoveRange(splitsToBeDeleted);
+                await _dbContext.SaveChangesAsync();
+            }
+
             transaction.Catcode = category.Code;
 
             _dbContext.Entry(transaction).State = EntityState.Modified;
@@ -188,27 +196,35 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
             foreach (var category in categories)
             {
-                var categoryList = await _dbContext.Categories.Where(c => c.ParentCode == category.Code).Include(c => c.Transactions).ToListAsync();
-                categoryList.Add(category);
+                //Za svaku kategoriju dohvatam i one kategorije cija je ova kategorija roditelj
+                var categoryList = await _dbContext.Categories
+                    .Where(c => c.ParentCode == category.Code || c.Code == category.Code)
+                    .Include(c => c.Transactions)
+                    .Include(c => c.SplitTransactions)
+                    .ThenInclude(st => st.Transaction)
+                    .ToListAsync();
 
                 var amount = 0.0;
                 var count = 0;
 
                 foreach(var cat in categoryList)
                 {
-                    var transactions = cat.Transactions.Where(t => t.Direction == direction);
+                    var nonSplittedTransactions = cat.Transactions.Where(t => t.Direction == direction && t.Catcode != "Z");
+                    var splittedTransactions = cat.SplitTransactions.Where(st => st.Transaction.Direction == direction);
 
                     if (!(startDate == DateTime.MinValue))
                     {
-                        transactions = transactions.Where(t => t.Date >= startDate);
+                        nonSplittedTransactions = nonSplittedTransactions.Where(t => t.Date >= startDate);
+                        splittedTransactions = splittedTransactions.Where(st => st.Transaction.Date >= startDate);
                     }
                     if (!(endDate == DateTime.MinValue))
                     {
-                        transactions = transactions.Where(t => t.Date <= endDate);
+                        nonSplittedTransactions = nonSplittedTransactions.Where(t => t.Date <= endDate);
+                        splittedTransactions = splittedTransactions.Where(st => st.Transaction.Date <= endDate);
                     }
-                    
-                    amount += transactions.Select(t => t.Amount).Sum();
-                    count += transactions.Count();
+
+                    amount += nonSplittedTransactions.Select(t => t.Amount).Sum() + splittedTransactions.Select(t => t.Amount).Sum();
+                    count += nonSplittedTransactions.Count() + splittedTransactions.Count();
                 }
                
                 if (count == 0)
@@ -248,14 +264,20 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
             var hasSplits = transaction.SplitTransactions.Count() > 0;
 
+            // HACK
             if (hasSplits)
             {
                 var splitsToBeDeleted = await _dbContext.SplitTransactions.Where(st => st.Id == id).ToListAsync();
                 _dbContext.SplitTransactions.RemoveRange(splitsToBeDeleted);
                 await _dbContext.SaveChangesAsync();
             }
+            
+ 
+            transaction.Catcode = "Z";
+            _dbContext.Entry(transaction).State = EntityState.Modified;
+            
 
-            foreach(var splitTransaction in splitTransactionCommand.splits)
+            foreach (var splitTransaction in splitTransactionCommand.splits)
             {
                 await _dbContext.AddAsync(new SplitTransactionEntity
                 {
