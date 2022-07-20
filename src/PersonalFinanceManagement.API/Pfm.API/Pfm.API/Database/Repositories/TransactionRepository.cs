@@ -173,7 +173,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             return ErrorHandling.OK;
         }
 
-        public async Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode)
+        public async Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction direction, string? catCode)
         {
             var queryCategories = _dbContext.Categories.Include(cat => cat.Transactions).AsQueryable();
 
@@ -196,7 +196,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
                 foreach(var cat in categoryList)
                 {
-                    var transactions = cat.Transactions.Where(t => true);
+                    var transactions = cat.Transactions.Where(t => t.Direction == direction);
 
                     if (!(startDate == DateTime.MinValue))
                     {
@@ -206,11 +206,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                     {
                         transactions = transactions.Where(t => t.Date <= endDate);
                     }
-                    if (direction.HasValue)
-                    {
-                        transactions = transactions.Where(t => t.Direction == direction);
-                    }
-
+                    
                     amount += transactions.Select(t => t.Amount).Sum();
                     count += transactions.Count();
                 }

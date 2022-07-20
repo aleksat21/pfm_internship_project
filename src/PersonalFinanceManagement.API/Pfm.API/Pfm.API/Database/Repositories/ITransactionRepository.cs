@@ -26,7 +26,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
         Task<ErrorHandling> CategorizeTransaction(string id, CategorizeDTO categorizeDTO);
 
-        Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode);
+        Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction direction, string? catCode);
 
         Task<ErrorHandling> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand);
 

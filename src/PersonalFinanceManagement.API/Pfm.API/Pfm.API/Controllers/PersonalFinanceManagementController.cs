@@ -92,7 +92,7 @@ namespace PersonalFinanceManagement.API.Controllers
             [FromQuery] string? catCode,
             [FromQuery] DateTime startDate,
             [FromQuery] DateTime endDate,
-            [FromQuery] Direction? direction
+            [FromQuery] Direction direction // selected debts by default
         )
         {
             var result = await _serviceTransactions.GetAnalytics(startDate, endDate, direction, catCode);
@@ -104,6 +104,7 @@ namespace PersonalFinanceManagement.API.Controllers
         public async Task<IActionResult> SplitTransaction([FromRoute] string id, [FromBody] SplitTransactionCommand splitTransactionCommand)
         {
             await _serviceTransactions.SplitTransaction(id, splitTransactionCommand);
+
             return Ok();
         }
 

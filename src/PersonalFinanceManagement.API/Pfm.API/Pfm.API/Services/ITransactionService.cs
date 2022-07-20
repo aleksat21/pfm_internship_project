@@ -28,7 +28,7 @@ namespace PersonalFinanceManagement.API.Services
         Task<SpendingByCategory> GetAnalytics(
             DateTime startDate,
             DateTime endDate,
-            Direction? direction,
+            Direction direction,
             string? catCode);
 
         Task SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand);

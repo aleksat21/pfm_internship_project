@@ -57,7 +57,7 @@ namespace PersonalFinanceManagement.API.Services
             switch (result)
             {
                 case ErrorHandling.CATEGORY_DOESNT_EXIST:
-                    throw new CategoryNotFoundException(null);
+                    throw new CategoryNotFoundException(categorizeDTO.Catcode);
                 case ErrorHandling.TRANSACTION_DOESNT_EXIST:
                     throw new TransactionNotFoundException(id);
                 default:
@@ -65,7 +65,7 @@ namespace PersonalFinanceManagement.API.Services
             }
         }
 
-        public async Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction? direction, string? catCode)
+        public async Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction direction, string? catCode)
         {
             return await _transactionRepository.GetAnalytics(startDate, endDate, direction, catCode);
         }
@@ -77,7 +77,8 @@ namespace PersonalFinanceManagement.API.Services
             switch (result)
             {
                 case ErrorHandling.CATEGORY_DOESNT_EXIST:
-                    throw new CategoryNotFoundException(null);
+                    string categories_response = string.Join(",", splitTransactionCommand.splits.Select(st => st.Catcode));
+                    throw new CategoryNotFoundException(categories_response);
                 case ErrorHandling.TRANSACTION_DOESNT_EXIST:
                     throw new TransactionNotFoundException(id);
                 case ErrorHandling.SPLIT_AMOUNT_OVER_LIMIT:
