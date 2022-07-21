@@ -3,6 +3,10 @@ using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.Categories;
+using PersonalFinanceManagement.API.Models.Pages;
+using PersonalFinanceManagement.API.Extensions;
+using System.Linq;
 
 namespace PersonalFinanceManagement.API.Mappings
 {
@@ -15,8 +19,14 @@ namespace PersonalFinanceManagement.API.Mappings
 
             CreateMap<PagedSortedList<TransactionEntity>, PagedSortedList<Transaction>>().ReverseMap();
 
+            CreateMap<SplitTransactionEntity, SingleTransactionWithSplit>().ReverseMap();
+            CreateMap<TransactionEntity, TransactionWithSplits>().ForMember(
+                d => d.Splits, opts => opts.MapFrom(s => s.SplitTransactions.ToList()))
+                .AfterMap((src, dest) => dest.Splits = dest.Splits.ToListOrNullIfEmpty());
+
             CreateMap<Transaction, TransactionEntity>().ReverseMap();
             CreateMap<Category, CategoryEntity>().ReverseMap();
         }
     }
 }
+

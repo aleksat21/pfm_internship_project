@@ -4,9 +4,13 @@ using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
-using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.Analytics;
+using PersonalFinanceManagement.API.Models.Categories;
 using PersonalFinanceManagement.API.Models.ExceptionHandling;
 using PersonalFinanceManagement.API.Models.Exceptions.DomainExceptions;
+using PersonalFinanceManagement.API.Models.Pages;
+using PersonalFinanceManagement.API.Models.SortOrders;
+using System.Linq;
 
 namespace PersonalFinanceManagement.API.Services
 {
@@ -21,7 +25,7 @@ namespace PersonalFinanceManagement.API.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<PagedSortedList<Transaction>> GetTransactions(
+        public async Task<PagedSortedList<TransactionWithSplits>> GetTransactions(
             DateTime startDate,
             DateTime endDate,
             Kind? transactionKind,
@@ -32,7 +36,16 @@ namespace PersonalFinanceManagement.API.Services
         )
         {
             var result = await _transactionRepository.GetTransactions(startDate, endDate, transactionKind, page, pageSize, sortBy, sortOrder);
-            return _mapper.Map<PagedSortedList<Transaction>>(result);
+
+            return new PagedSortedList<TransactionWithSplits>
+            {
+                PageSize = result.PageSize,
+                Page = result.Page,
+                TotalCount = result.TotalCount,
+                SortBy = result.SortBy,
+                SortOrder = result.SortOrder,
+                Items = _mapper.Map<List<TransactionWithSplits>>(result.Items)
+        };
         }
 
         public async Task ImportTransactionsFromCSV(CreateTransactionListDTO transactions)

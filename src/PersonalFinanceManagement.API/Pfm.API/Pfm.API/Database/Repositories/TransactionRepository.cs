@@ -4,8 +4,11 @@ using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
-using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.Analytics;
+using PersonalFinanceManagement.API.Models.Categories;
 using PersonalFinanceManagement.API.Models.ExceptionHandling;
+using PersonalFinanceManagement.API.Models.Pages;
+using PersonalFinanceManagement.API.Models.SortOrders;
 
 namespace PersonalFinanceManagement.API.Database.Repositories
 {
@@ -35,7 +38,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             SortOrder? sortOrder = SortOrder.Asc
         )
         {
-            var query = _dbContext.Transactions.AsQueryable();
+            var query = _dbContext.Transactions.Include(t => t.SplitTransactions).AsQueryable();
 
             var totalCount = query.Count();
 
@@ -70,9 +73,6 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                     case "direction":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Direction) : query.OrderByDescending(x => x.Direction);
                         break;
-                    case "amount":
-                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Amount) : query.OrderByDescending(x => x.Amount);
-                        break;
                     case "description":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Description) : query.OrderByDescending(x => x.Description);
                         break;
@@ -84,9 +84,6 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                         break;
                     case "kind":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Kind) : query.OrderByDescending(x => x.Kind);
-                        break;
-                    case "catcode":
-                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Catcode) : query.OrderByDescending(x => x.Catcode);
                         break;
                     default:
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Date);

@@ -9,7 +9,7 @@ namespace PersonalFinanceManagement.API.Database.Configurations
         public void Configure(EntityTypeBuilder<SplitTransactionEntity> builder)
         {
             builder.ToTable("SplitTransactions");
-            builder.HasKey(st => new { st.Id, st.Catcode, st.Amount });
+            builder.HasKey(st => new { st.Id, st.Catcode});
         }
     }
 }

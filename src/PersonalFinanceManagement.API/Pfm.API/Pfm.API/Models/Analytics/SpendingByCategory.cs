@@ -1,4 +1,4 @@
-﻿namespace PersonalFinanceManagement.API.Models
+﻿namespace PersonalFinanceManagement.API.Models.Analytics
 {
     public class SpendingByCategory
     {

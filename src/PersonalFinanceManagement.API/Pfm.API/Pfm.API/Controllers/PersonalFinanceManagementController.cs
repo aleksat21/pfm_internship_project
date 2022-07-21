@@ -4,7 +4,9 @@ using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
-using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.Analytics;
+using PersonalFinanceManagement.API.Models.Categories;
+using PersonalFinanceManagement.API.Models.SortOrders;
 using PersonalFinanceManagement.API.Services;
 
 namespace PersonalFinanceManagement.API.Controllers

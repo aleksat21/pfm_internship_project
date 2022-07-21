@@ -2,7 +2,10 @@
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
-using PersonalFinanceManagement.API.Models;
+using PersonalFinanceManagement.API.Models.Analytics;
+using PersonalFinanceManagement.API.Models.Categories;
+using PersonalFinanceManagement.API.Models.Pages;
+using PersonalFinanceManagement.API.Models.SortOrders;
 
 namespace PersonalFinanceManagement.API.Services
 {
@@ -10,7 +13,7 @@ namespace PersonalFinanceManagement.API.Services
     {
         Task ImportTransactionsFromCSV(CreateTransactionListDTO transactions);
 
-        Task<PagedSortedList<Transaction>> GetTransactions(
+        Task<PagedSortedList<TransactionWithSplits>> GetTransactions(
             DateTime startDate,
             DateTime endDate,
             Kind? transactionKind,
