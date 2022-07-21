@@ -1,6 +1,6 @@
 ﻿using PersonalFinanceManagement.API.Database.Entities;
 
-namespace PersonalFinanceManagement.API.Models
+namespace PersonalFinanceManagement.API.Models.Pages
 {
     public class Transaction
     {
