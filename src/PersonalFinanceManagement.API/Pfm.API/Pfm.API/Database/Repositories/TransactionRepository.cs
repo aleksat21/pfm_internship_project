@@ -40,7 +40,6 @@ namespace PersonalFinanceManagement.API.Database.Repositories
         {
             var query = _dbContext.Transactions.Include(t => t.SplitTransactions).AsQueryable();
 
-            var totalCount = query.Count();
 
             if (transactionKind != null)
             {
@@ -94,6 +93,8 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             {
                 query = query.OrderBy(x => x.Date);
             }
+
+            var totalCount = query.Count();
 
             query = query.Skip((page.Value - 1) * pageSize.Value).Take(pageSize.Value);
 

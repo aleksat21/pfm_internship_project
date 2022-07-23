@@ -31,6 +31,10 @@ namespace PersonalFinanceManagement.API
 
             builder.Services.AddScoped<ITransactionService, TransactionService>();
             builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+            });
 
             builder.Services.AddTransient<ExceptionMiddleware>();
 
@@ -65,6 +69,10 @@ namespace PersonalFinanceManagement.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors("CorsPolicy");
+
+            app.UseRouting();
 
             app.UseAuthorization();
 

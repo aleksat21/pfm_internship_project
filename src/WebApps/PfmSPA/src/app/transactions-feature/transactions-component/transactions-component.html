@@ -1,0 +1,89 @@
+<mat-drawer-container class="example-container" style="height: 100%">
+  <mat-drawer mode="side" opened class="nav-class">
+
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker>
+        <mat-date-range-picker-actions>
+          <button mat-button matDateRangePickerCancel>Cancel</button>
+          <button mat-raised-button color="primary" matDateRangePickerApply>Apply</button>
+        </mat-date-range-picker-actions>
+      </mat-date-range-picker>
+    
+      <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+      <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+    </mat-form-field>
+
+  </mat-drawer>
+  <mat-drawer-content>
+    <mat-card class="user-card">
+      <mat-card-title>List of transactions</mat-card-title>
+      <mat-card-subtitle>Transactions</mat-card-subtitle>
+      <mat-card-content>
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z0 user-table">
+    
+              <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef> Id </th>
+                  <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="beneficiaryName">
+                  <th mat-header-cell *matHeaderCellDef> Beneficiary name </th>
+                  <td mat-cell *matCellDef="let element"> {{element.beneficiaryName}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Date </th>
+                <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="direction">
+                <th mat-header-cell *matHeaderCellDef> Direction </th>
+                <td mat-cell *matCellDef="let element"> {{element.direction}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef> Amount </th>
+                <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef> Description </th>
+                <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="currency">
+                <th mat-header-cell *matHeaderCellDef> Currency </th>
+                <td mat-cell *matCellDef="let element"> {{element.currency}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="mcc">
+                <th mat-header-cell *matHeaderCellDef> MCC </th>
+                <td mat-cell *matCellDef="let element"> {{element.mcc}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="kind">
+                <th mat-header-cell *matHeaderCellDef> Kind </th>
+                <td mat-cell *matCellDef="let element"> {{element.kind}} </td>
+              </ng-container>
+    
+              <ng-container matColumnDef="catcode">
+                <th mat-header-cell *matHeaderCellDef> Category code </th>
+                <td mat-cell *matCellDef="let element"> {{element.catcode}} </td>
+              </ng-container>
+    
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+    
+          <mat-paginator [length]="resultsLength" [pageSize]="10" aria-label="Select page of Transactions search results"></mat-paginator>
+      </mat-card-content>
+    </mat-card>
+  </mat-drawer-content>
+</mat-drawer-container>
+
