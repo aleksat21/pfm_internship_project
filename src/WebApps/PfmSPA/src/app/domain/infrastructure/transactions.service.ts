@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SortDirection } from '@angular/material/sort';
-import { IGetTransactionsRequst } from '../models/IGetTransactionRequst';
+import { IGetTransactionsRequest } from '../models/IGetTransactionRequst';
 import { Observable } from 'rxjs';
 import { IGetTransactionsResponse } from '../models/IGetTransactionsResponse';
 
@@ -12,7 +12,7 @@ export class TransactionsService {
 
   constructor(private http : HttpClient) { }
 
-  public getTransactions(request : IGetTransactionsRequst) : Observable<IGetTransactionsResponse>
+  public getTransactions(request : IGetTransactionsRequest) : Observable<IGetTransactionsResponse>
   {
     let url = "http://localhost:8001/api/v1/PersonalFinanceManagement/transactions"
 
@@ -26,7 +26,9 @@ export class TransactionsService {
     if (request.endDate != undefined){
       queryParams = queryParams.append("endDate", request.endDate.toDateString())
     }
-
+    if (request.kind != 'all'){
+      queryParams = queryParams.append("transactionKind", request.kind)
+    }
     queryParams = queryParams.append("page", request.page)
     queryParams = queryParams.append("pageSize", request.pageSize)
 
@@ -35,6 +37,4 @@ export class TransactionsService {
     })  
   }
 
-
-  
 }

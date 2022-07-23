@@ -16,7 +16,7 @@ import {FormGroup, FormControl} from '@angular/forms';
   templateUrl: './transactions-component.html',
   styleUrls: ['./transactions-component.css']
 })
-export class TransactionsComponent implements AfterViewInit{
+export class TransactionsComponent implements AfterViewInit, OnInit{
 
   public displayedColumns : string[] = ['id', 'beneficiaryName', 'date', 'direction', 'amount', 'description', 'currency', 'mcc', 'kind', 'catcode']
   public dataSource = new MatTableDataSource<TransactionView>()
@@ -28,21 +28,48 @@ export class TransactionsComponent implements AfterViewInit{
     end: new FormControl()
   });
 
+  fgKind : FormGroup
+
+  selectedKindOption = "all";
+  kinds: Kind[] = [
+    {value: 'all', viewValue: 'All'},
+    {value: 'dep', viewValue: 'Deposit'},
+    {value: 'wdw', viewValue: 'Withdrawal'},
+    {value: 'pmt', viewValue: 'Payment'},
+    {value: 'fee', viewValue: 'Fee'},
+    {value: 'inc', viewValue: 'Intereset credit'},
+    {value: 'rev', viewValue: 'Reversal'},
+    {value: 'adj', viewValue: 'Adjustment'},
+    {value: 'lnd', viewValue: 'Loan disbursement'},
+    {value: 'lnr', viewValue: 'Loan repayment'},
+    {value: 'fcx', viewValue: 'Foreign currency exchange'},
+    {value: 'aop', viewValue: 'Account openning'},
+    {value: 'acl', viewValue: 'Account closing'},
+    {value: 'spl', viewValue: 'Split Payment'},
+    {value: 'sal', viewValue: 'Salary'}
+  ];
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
       private transactionsService : TransactionsFacadeService ,
       private router : Router
   ) { }
 
-  // catchError(() => observableOf(null)));
+  ngOnInit(): void {
+    this.fgKind = new FormGroup({
+      kinds : new FormControl(this.selectedKindOption)
+    })
+  }
+
   ngAfterViewInit() {
     this.range.valueChanges.subscribe(() => this.paginator.pageIndex = 0)
-    merge(this.range.valueChanges, this.paginator.page).pipe(
+    merge(this.range.valueChanges, this.paginator.page, this.fgKind.valueChanges).pipe(
       startWith({}),
       switchMap(() => {
-        return this.transactionsService.getTransactions(this.paginator.pageIndex + 1, this.paginator.pageSize, this.range.value['start'], this.range.value['end'])
+        return this.transactionsService.getTransactions(this.paginator.pageIndex + 1, this.paginator.pageSize, this.range.value['start'], this.range.value['end'], this.fgKind.value['kinds'])
       }),
       map(data => {
+        console.log(this.fgKind.value['kinds'])
         if (data === null){
           return []
         }
@@ -55,11 +82,7 @@ export class TransactionsComponent implements AfterViewInit{
   }
 }
 
-export interface TransactionsAPI {
-  pageSize : number,
-  page : number,
-  totalCount : number,
-  sortBy : string,
-  sortOrder : string
-  items : TransactionView[]
+interface Kind {
+  value: string;
+  viewValue: string;
 }

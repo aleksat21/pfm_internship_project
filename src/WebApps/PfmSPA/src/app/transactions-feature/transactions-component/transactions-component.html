@@ -19,6 +19,18 @@
       <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
 
+    <form [formGroup] = "fgKind">
+      <mat-form-field appearance="fill">
+        <mat-label>Kind</mat-label>
+        <mat-select formControlName="kinds">
+          <mat-option *ngFor="let kind of kinds" [value]="kind.value">
+            {{kind.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+    
+    
   </mat-drawer>
   <mat-drawer-content>
     <mat-card class="user-card">

@@ -11,10 +11,10 @@ export class TransactionsFacadeService {
 
   constructor(private transactionsService : TransactionsService) { }
 
-  public getTransactions(page : number, pageSize : number, startDate? : Date , endDate? : Date) : Observable<IGetTransactionsResponse>{
-    const requst = {page , pageSize, startDate, endDate}
+  public getTransactions(page : number, pageSize : number, startDate? : Date , endDate? : Date, kind = "all") : Observable<IGetTransactionsResponse>{
+    const request = {page , pageSize, startDate, endDate, kind}
 
-    return this.transactionsService.getTransactions(requst).pipe(
+    return this.transactionsService.getTransactions(request).pipe(
       map((response : IGetTransactionsResponse) => {
         return response;
       }),

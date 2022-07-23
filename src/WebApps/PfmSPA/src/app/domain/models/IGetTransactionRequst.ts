@@ -1,6 +1,7 @@
- export interface IGetTransactionsRequst {
+ export interface IGetTransactionsRequest {
     page : number,
     pageSize : number,
     startDate? : Date,
-    endDate? : Date
+    endDate? : Date,
+    kind : string
  }
