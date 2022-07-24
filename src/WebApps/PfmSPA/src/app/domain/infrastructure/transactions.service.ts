@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SortDirection } from '@angular/material/sort';
-import { IGetTransactionsRequest } from '../models/IGetTransactionRequst';
+import { IGetTransactionsRequest } from '../models/IGetTransactionRequest';
 import { Observable } from 'rxjs';
 import { IGetTransactionsResponse } from '../models/IGetTransactionsResponse';
+import { IGetCategoriesRequest } from '../models/IGetCategoriesRequest';
+import { IGetCategoriesResponse } from '../models/IGetCategoriesResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,20 @@ import { IGetTransactionsResponse } from '../models/IGetTransactionsResponse';
 export class TransactionsService {
 
   constructor(private http : HttpClient) { }
+
+  public getCategories(request : IGetCategoriesRequest) : Observable<IGetCategoriesResponse>{
+    let url = "http://localhost:8001/api/v1/PersonalFinanceManagement/categories"
+
+    let queryParams = new HttpParams();
+
+    if (request.parentCode != undefined){
+      queryParams = queryParams.append("parentId", request.parentCode)
+    }
+
+    return this.http.get<IGetCategoriesResponse>(url, {
+      params : queryParams
+    })
+  }
 
   public getTransactions(request : IGetTransactionsRequest) : Observable<IGetTransactionsResponse>
   {
@@ -29,6 +45,9 @@ export class TransactionsService {
     if (request.kind != 'all'){
       queryParams = queryParams.append("transactionKind", request.kind)
     }
+    queryParams = queryParams.append("sortBy", request.sortBy);
+    queryParams = queryParams.append("sortOrder", request.orderByDirection);
+
     queryParams = queryParams.append("page", request.page)
     queryParams = queryParams.append("pageSize", request.pageSize)
 

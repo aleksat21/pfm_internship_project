@@ -19,18 +19,41 @@
       <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
 
+    <!--  -->
+
     <form [formGroup] = "fgKind">
       <mat-form-field appearance="fill">
         <mat-label>Kind</mat-label>
-        <mat-select formControlName="kinds">
+        <mat-select formControlName="kindFormControl">
           <mat-option *ngFor="let kind of kinds" [value]="kind.value">
             {{kind.viewValue}}
           </mat-option>
         </mat-select>
       </mat-form-field>
     </form>
-    
-    
+
+    <form [formGroup] = "fgSortBy">
+      <mat-form-field appearance="fill">
+        <mat-label>Sort by</mat-label>
+        <mat-select formControlName="sortByFormControl">
+          <mat-option *ngFor="let sortBy of sortByValues" [value]="sortBy.value">
+            {{sortBy.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <form [formGroup] = "fgOrderByDirection">
+      <mat-form-field appearance="fill">
+        <mat-label>Sort by direction</mat-label>
+        <mat-select formControlName="orderByDirectionFormControl">
+          <mat-option *ngFor="let orderByDirection of orderByDirectionValues" [value]="orderByDirection.value">
+            {{orderByDirection.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+        
   </mat-drawer>
   <mat-drawer-content>
     <mat-card class="user-card">
@@ -85,7 +108,7 @@
               </ng-container>
     
               <ng-container matColumnDef="catcode">
-                <th mat-header-cell *matHeaderCellDef> Category code </th>
+                <th mat-header-cell *matHeaderCellDef> Category </th>
                 <td mat-cell *matCellDef="let element"> {{element.catcode}} </td>
               </ng-container>
     

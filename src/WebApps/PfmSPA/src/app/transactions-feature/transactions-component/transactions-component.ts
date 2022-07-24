@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 
 import {MatPaginator} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
-import { MatSort, SortDirection } from '@angular/material/sort';
+import { MatSort, Sort, SortDirection } from '@angular/material/sort';
 import { merge, Observable, of as observableOf, of } from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { TransactionView } from '../../domain/models/TransactionView';
 import { TransactionsFacadeService } from 'src/app/domain/application-services/transactions-facade.service';
 import { MatDatepicker } from '@angular/material/datepicker';
 import {FormGroup, FormControl} from '@angular/forms';
+import { CategoryView } from 'src/app/domain/models/CategoryView';
 
 @Component({
   selector: 'app-transactions-component',
@@ -21,6 +22,8 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
   public displayedColumns : string[] = ['id', 'beneficiaryName', 'date', 'direction', 'amount', 'description', 'currency', 'mcc', 'kind', 'catcode']
   public dataSource = new MatTableDataSource<TransactionView>()
 
+  categories : CategoryView[] = []
+
   resultsLength = 0;
 
   range = new FormGroup({
@@ -29,7 +32,6 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
   });
 
   fgKind : FormGroup
-
   selectedKindOption = "all";
   kinds: Kind[] = [
     {value: 'all', viewValue: 'All'},
@@ -49,6 +51,25 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
     {value: 'sal', viewValue: 'Salary'}
   ];
 
+  fgSortBy : FormGroup
+  selectedSortByOption = "date"
+  sortByValues : SortBy[] = [
+    {viewValue : "Id", value : "id"},
+    {viewValue : "Beneficiary name", value : "beneficiary-name"},
+    {viewValue : "Date", value : "date"},
+    {viewValue : "Direction", value : "direction"},
+    {viewValue : "Description", value : "description"},
+    {viewValue : "Currency", value : "currency"},
+    {viewValue : "Kind", value : "kind"}
+  ]
+
+  fgOrderByDirection : FormGroup
+  selectedOrderByOption = "asc"
+  orderByDirectionValues : OrderByDirection[] = [
+    {viewValue : "Ascending", value : "asc"},
+    {viewValue : "Desceding", value : "desc"}
+  ]
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
       private transactionsService : TransactionsFacadeService ,
@@ -56,25 +77,50 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
   ) { }
 
   ngOnInit(): void {
+    this.transactionsService.getCategories().subscribe(data => (this.categories = data))
+
     this.fgKind = new FormGroup({
-      kinds : new FormControl(this.selectedKindOption)
+      kindFormControl : new FormControl(this.selectedKindOption)
+    })
+
+    this.fgSortBy = new FormGroup({
+      sortByFormControl: new FormControl(this.selectedSortByOption)
+    })
+
+    this.fgOrderByDirection = new FormGroup({
+      orderByDirectionFormControl : new FormControl(this.selectedOrderByOption)
     })
   }
 
   ngAfterViewInit() {
     this.range.valueChanges.subscribe(() => this.paginator.pageIndex = 0)
-    merge(this.range.valueChanges, this.paginator.page, this.fgKind.valueChanges).pipe(
+
+    merge(this.fgKind.valueChanges, this.fgSortBy.valueChanges, this.fgOrderByDirection.valueChanges).subscribe(() => {this.paginator.pageIndex = 0})
+
+    merge(this.range.valueChanges, this.paginator.page, this.fgKind.valueChanges, this.fgSortBy.valueChanges, this.fgOrderByDirection.valueChanges).pipe(
       startWith({}),
       switchMap(() => {
-        return this.transactionsService.getTransactions(this.paginator.pageIndex + 1, this.paginator.pageSize, this.range.value['start'], this.range.value['end'], this.fgKind.value['kinds'])
+        return this.transactionsService.getTransactions(
+          this.paginator.pageIndex + 1,
+          this.paginator.pageSize,
+          this.range.value['start'],
+          this.range.value['end'],
+          this.fgKind.value['kindFormControl'],
+          this.fgSortBy.value['sortByFormControl'],
+          this.fgOrderByDirection.value['orderByDirectionFormControl'])
       }),
       map(data => {
-        console.log(this.fgKind.value['kinds'])
         if (data === null){
           return []
         }
 
         this.resultsLength = data.totalCount
+        data.items.map(t => {
+          let category : (CategoryView | undefined)  = this.categories.find(c => c.code == t.catcode)
+          if (category != undefined){
+              t.catcode = category.name
+          }
+        })
         return data.items
       })
     )
@@ -85,4 +131,14 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
 interface Kind {
   value: string;
   viewValue: string;
+}
+
+interface SortBy {
+  value : string,
+  viewValue : string
+}
+
+interface OrderByDirection {
+  value : string,
+  viewValue : string
 }
