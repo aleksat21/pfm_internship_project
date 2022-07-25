@@ -1,0 +1,380 @@
+{
+	"id": "78e7a63f-5d8d-46d8-b57b-2800ad08d242",
+	"name": "PfmValidApiNew",
+	"timestamp": "2022-07-25T15:39:06.205Z",
+	"collection_id": "22315769-855f6eb4-39d9-4001-bb3a-622a27570a86",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 76,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "4557043d-e6ca-4bfd-b750-7b5c5e08b90a",
+			"name": "Get paged transactions",
+			"time": 7,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Validating schema": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 10,
+					"fail": 0
+				},
+				"Validating schema": {
+					"pass": 10,
+					"fail": 0
+				}
+			},
+			"times": [
+				11,
+				8,
+				6,
+				7,
+				8,
+				8,
+				7,
+				7,
+				7,
+				7
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				}
+			]
+		},
+		{
+			"id": "5a127684-898b-4b69-9bb7-bf6e3bc31be5",
+			"name": "Get categories",
+			"time": 5,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Validating schema": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 10,
+					"fail": 0
+				},
+				"Validating schema": {
+					"pass": 10,
+					"fail": 0
+				}
+			},
+			"times": [
+				5,
+				5,
+				5,
+				5,
+				5,
+				7,
+				6,
+				6,
+				6,
+				5
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				}
+			]
+		},
+		{
+			"id": "419bed0f-d1a9-449b-a2f1-6a5a89f91b6a",
+			"name": "Categorize transactions",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 9,
+					"fail": 0
+				}
+			},
+			"times": [
+				21,
+				12,
+				11,
+				11,
+				11,
+				13,
+				11,
+				17,
+				17
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "9d47723e-83c3-4582-b71f-7633748a8f69",
+			"name": "Split transaction",
+			"time": 17,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 9,
+					"fail": 0
+				}
+			},
+			"times": [
+				16,
+				12,
+				13,
+				12,
+				17,
+				14,
+				10,
+				11,
+				17
+			],
+			"allTests": [
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				},
+				{
+					"Status code is 200": true
+				}
+			]
+		},
+		{
+			"id": "54ad0033-f64b-4fc8-b83a-b489174d6461",
+			"name": "Get analytics",
+			"time": 80,
+			"responseCode": {
+				"code": 200,
+				"name": "OK"
+			},
+			"tests": {
+				"Status code is 200": true,
+				"Validating schema": true
+			},
+			"testPassFailCounts": {
+				"Status code is 200": {
+					"pass": 9,
+					"fail": 0
+				},
+				"Validating schema": {
+					"pass": 9,
+					"fail": 0
+				}
+			},
+			"times": [
+				81,
+				124,
+				80,
+				95,
+				85,
+				93,
+				105,
+				97,
+				80
+			],
+			"allTests": [
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				},
+				{
+					"Status code is 200": true,
+					"Validating schema": true
+				}
+			]
+		}
+	],
+	"count": 10,
+	"totalTime": 1217,
+	"collection": {
+		"requests": [
+			{
+				"id": "4557043d-e6ca-4bfd-b750-7b5c5e08b90a",
+				"method": "GET"
+			},
+			{
+				"id": "5a127684-898b-4b69-9bb7-bf6e3bc31be5",
+				"method": "GET"
+			},
+			{
+				"id": "419bed0f-d1a9-449b-a2f1-6a5a89f91b6a",
+				"method": "POST"
+			},
+			{
+				"id": "9d47723e-83c3-4582-b71f-7633748a8f69",
+				"method": "POST"
+			},
+			{
+				"id": "54ad0033-f64b-4fc8-b83a-b489174d6461",
+				"method": "GET"
+			}
+		]
+	}
+}

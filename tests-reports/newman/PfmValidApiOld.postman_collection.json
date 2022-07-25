@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "855f6eb4-39d9-4001-bb3a-622a27570a86",
-		"name": "PFM valid API",
+		"_postman_id": "9511c9d5-3591-4750-9f19-772eef66cc7f",
+		"name": "PfmValidApiOld",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "22315769"
 	},
@@ -17,12 +17,14 @@
 							"  return Math.floor(Math.random() * (max - min + 1) + min)\r",
 							"}\r",
 							"\r",
-							"var dateFrom = new Date(2021, randomIntFromInterval(1, 12), randomIntFromInterval(1, 28) )\r",
+							"var dateFrom = new Date(2021, randomIntFromInterval(1, 11), randomIntFromInterval(1, 28) )\r",
 							"var dateTo = new Date(dateFrom.getTime())\r",
 							"dateTo.setMonth(dateTo.getMonth() + 12)\r",
 							"\r",
-							"var page = randomIntFromInterval(1, 10)\r",
+							"var page = randomIntFromInterval(1, 5)\r",
+							"var pageSize = 5\r",
 							"pm.environment.set('page', page) \r",
+							"pm.environment.set('pageSize', page) \r",
 							"\r",
 							"pm.environment.set('dateFrom', dateFrom) \r",
 							"pm.environment.set('dateTo', dateTo) \r",
@@ -141,16 +143,10 @@
 							"\r",
 							"if (transactionId != undefined)\r",
 							"    pm.globals.set(\"transactionId\", transactionId)\r",
-							"else {\r",
-							"    pm.globals.set(\"transactionId\", \"46251212\")\r",
-							"}\r",
+							"\r",
 							"if (splitTransactionId != undefined){\r",
 							"    pm.globals.set(\"splitTransactionAmount\", response.items[1].amount)\r",
 							"    pm.globals.set(\"splitTransactionId\", splitTransactionId)\r",
-							"}\r",
-							"else {\r",
-							"    pm.globals.set(\"splitTransactionAmount\", 22.5)\r",
-							"    pm.globals.set(\"splitTransactionId\", \"38450379\")\r",
 							"}"
 						],
 						"type": "text/javascript"
@@ -161,7 +157,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}transactions?startDate={{dateFrom}}&endDate={{dateTo}}&page={{page}}",
+					"raw": "{{url}}transactions?startDate={{dateFrom}}&page={{page}}&pageSize={{pageSize}}",
 					"host": [
 						"{{url}}transactions"
 					],
@@ -177,7 +173,8 @@
 						},
 						{
 							"key": "endDate",
-							"value": "{{dateTo}}"
+							"value": "{{dateTo}}",
+							"disabled": true
 						},
 						{
 							"key": "page",
@@ -185,8 +182,7 @@
 						},
 						{
 							"key": "pageSize",
-							"value": "10",
-							"disabled": true
+							"value": "{{pageSize}}"
 						},
 						{
 							"key": "sortBy",
