@@ -111,6 +111,16 @@
                 <th mat-header-cell *matHeaderCellDef> Category </th>
                 <td mat-cell *matCellDef="let element"> {{element.catcode}} </td>
               </ng-container>
+
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action category </th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-button color="primary"
+                        (click)="showTransactionDetails(element.id)" aria-label="Example icon button with a bookmark icon">
+                        Select category
+                    </button>
+                </td>
+              </ng-container>
     
               <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -122,3 +132,5 @@
   </mat-drawer-content>
 </mat-drawer-container>
 
+
+<app-user-details></app-user-details>

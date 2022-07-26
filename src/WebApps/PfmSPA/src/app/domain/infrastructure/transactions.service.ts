@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { SortDirection } from '@angular/material/sort';
-import { IGetTransactionsRequest } from '../models/IGetTransactionRequest';
 import { Observable } from 'rxjs';
-import { IGetTransactionsResponse } from '../models/IGetTransactionsResponse';
-import { IGetCategoriesRequest } from '../models/IGetCategoriesRequest';
-import { IGetCategoriesResponse } from '../models/IGetCategoriesResponse';
+import { IGetTransactionsResponse } from '../models/GetTransactionsModels/IGetTransactionsResponse';
+import { IGetCategoriesRequest } from '../models/GetTransactionsModels/IGetCategoriesRequest';
+import { IGetCategoriesResponse } from '../models/GetTransactionsModels/IGetCategoriesResponse';
+import { IGetTransactionsRequest } from '../models/GetTransactionsModels/IGetTransactionRequest';
+import { ICategorizeRequest } from '../models/PostCategorizeModels/ICategorizeRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,12 @@ import { IGetCategoriesResponse } from '../models/IGetCategoriesResponse';
 export class TransactionsService {
 
   constructor(private http : HttpClient) { }
+
+  public categorize(request : ICategorizeRequest) : Observable<Object>{
+    let url = "http://localhost:8001/api/v1/PersonalFinanceManagement/transactions/" + request.id + "/categorize"
+
+    return this.http.post(url, request.category)
+  }
 
   public getCategories(request : IGetCategoriesRequest) : Observable<IGetCategoriesResponse>{
     let url = "http://localhost:8001/api/v1/PersonalFinanceManagement/categories"

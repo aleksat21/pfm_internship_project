@@ -6,11 +6,12 @@ import {MatTableDataSource} from '@angular/material/table';
 import { MatSort, Sort, SortDirection } from '@angular/material/sort';
 import { merge, Observable, of as observableOf, of } from 'rxjs';
 import {catchError, map, startWith, switchMap} from 'rxjs/operators';
-import { TransactionView } from '../../domain/models/TransactionView';
 import { TransactionsFacadeService } from 'src/app/domain/application-services/transactions-facade.service';
 import { MatDatepicker } from '@angular/material/datepicker';
 import {FormGroup, FormControl} from '@angular/forms';
-import { CategoryView } from 'src/app/domain/models/CategoryView';
+import { CategoryView } from 'src/app/domain/models/GetTransactionsModels/CategoryView';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import { TransactionView } from 'src/app/domain/models/GetTransactionsModels/TransactionView';
 
 @Component({
   selector: 'app-transactions-component',
@@ -19,7 +20,7 @@ import { CategoryView } from 'src/app/domain/models/CategoryView';
 })
 export class TransactionsComponent implements AfterViewInit, OnInit{
 
-  public displayedColumns : string[] = ['id', 'beneficiaryName', 'date', 'direction', 'amount', 'description', 'currency', 'mcc', 'kind', 'catcode']
+  public displayedColumns : string[] = ['id', 'beneficiaryName', 'date', 'direction', 'amount', 'description', 'currency', 'mcc', 'kind', 'catcode', 'action' ]
   public dataSource = new MatTableDataSource<TransactionView>()
 
   categories : CategoryView[] = []
@@ -72,10 +73,18 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
+     public dialog: MatDialog,
       private transactionsService : TransactionsFacadeService ,
       private router : Router
+      
   ) { }
 
+
+  public showTransactionDetails(transactionId: string) {
+    this.router.navigate(['transactions/categorize/' + transactionId]);
+  }
+  
+  
   ngOnInit(): void {
     this.transactionsService.getCategories().subscribe(data => (this.categories = data))
 
@@ -120,6 +129,11 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
           if (category != undefined){
               t.catcode = category.name
           }
+          let kind_detail  = this.kinds.find(f => f.value == t.kind)!
+          
+          if (t.kind != undefined)
+            t.kind = kind_detail.viewValue 
+
         })
         return data.items
       })

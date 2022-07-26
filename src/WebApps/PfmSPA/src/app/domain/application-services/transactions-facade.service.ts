@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { TransactionsService } from '../infrastructure/transactions.service';
-import { IGetCategoriesResponse } from '../models/IGetCategoriesResponse';
-import { IGetTransactionsResponse } from '../models/IGetTransactionsResponse';
-import { TransactionView } from '../models/TransactionView';
+import { IGetCategoriesResponse } from '../models/GetTransactionsModels/IGetCategoriesResponse';
+import { IGetTransactionsResponse } from '../models/GetTransactionsModels/IGetTransactionsResponse';
+import { CategorizeView } from '../models/PostCategorizeModels/CategorizeView';
+import { ICategorizeRequest } from '../models/PostCategorizeModels/ICategorizeRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,22 @@ import { TransactionView } from '../models/TransactionView';
 export class TransactionsFacadeService {
 
   constructor(private transactionsService : TransactionsService) { }
+
+
+  public categorize(id : string, catcode : string){
+    const catView : CategorizeView = {catcode : catcode}
+    const request : ICategorizeRequest = {id : id, category : catView}
+
+    return this.transactionsService.categorize(request).pipe(
+      map(() => {
+        return true;
+      }),
+      catchError((err) => {
+        console.error(err)
+        return of(false)
+      })
+    )
+  }
 
   public getCategories(parentCode? : string){
     const request = {parentCode}

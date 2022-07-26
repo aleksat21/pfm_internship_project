@@ -21,13 +21,13 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-
-
+import { TransactionDetailsComponent } from './transactions-feature/transaction-detail-component/transaction-detail-component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TransactionsComponent
+    TransactionsComponent,
+    TransactionDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +50,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSortModule,
     MatSidenavModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
