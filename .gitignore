@@ -135,4 +135,4 @@ src/PersonalFinanceManagement.API/Pfm.API/.vs/
 *.v2
 *.v1
 *.v2
-tests-reports/
+tests-reports/newman/

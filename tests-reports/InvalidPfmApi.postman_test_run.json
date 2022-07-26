@@ -1,0 +1,348 @@
+{
+	"id": "cc6c1c43-38d0-490f-bbb8-4acd11c2c46d",
+	"name": "InvalidPfmApi",
+	"timestamp": "2022-07-26T23:06:03.498Z",
+	"collection_id": "22315769-9e093935-d95b-47b8-a3fa-5e843f6d852c",
+	"folder_id": 0,
+	"environment_id": "0",
+	"totalPass": 50,
+	"totalFail": 0,
+	"results": [
+		{
+			"id": "df727e96-92bd-44f5-849d-31fcc3900486",
+			"name": "SplitTransactionWrongAmount",
+			"time": 6,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400": {
+					"pass": 10,
+					"fail": 0
+				}
+			},
+			"times": [
+				7,
+				5,
+				7,
+				6,
+				6,
+				7,
+				5,
+				7,
+				6,
+				6
+			],
+			"allTests": [
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				}
+			]
+		},
+		{
+			"id": "40c15c75-ddf7-4468-a594-a5f79bdf01c0",
+			"name": "SplitTransactionWrongCategory",
+			"time": 6,
+			"responseCode": {
+				"code": 400,
+				"name": "Bad Request"
+			},
+			"tests": {
+				"Status code is 400": true
+			},
+			"testPassFailCounts": {
+				"Status code is 400": {
+					"pass": 10,
+					"fail": 0
+				}
+			},
+			"times": [
+				6,
+				6,
+				6,
+				6,
+				5,
+				6,
+				5,
+				6,
+				6,
+				6
+			],
+			"allTests": [
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				},
+				{
+					"Status code is 400": true
+				}
+			]
+		},
+		{
+			"id": "f5cd48c7-9202-4e8e-a806-723707a573d7",
+			"name": "SplitTransactionWrongTransaction",
+			"time": 6,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Status code is 404": true
+			},
+			"testPassFailCounts": {
+				"Status code is 404": {
+					"pass": 10,
+					"fail": 0
+				}
+			},
+			"times": [
+				6,
+				6,
+				5,
+				5,
+				6,
+				5,
+				6,
+				6,
+				5,
+				6
+			],
+			"allTests": [
+				{
+					"Status code is 404": true
+				},
+				{
+					"Status code is 404": true
+				},
+				{
+					"Status code is 404": true
+				},
+				{
+					"Status code is 404": true
+				},
+				{
+					"Status code is 404": true
+				},
+				{
+					"Status code is 404": true
+				},
+				{
+					"Status code is 404": true
+				},
+				{
+					"Status code is 404": true
+				},
+				{
+					"Status code is 404": true
+				},
+				{
+					"Status code is 404": true
+				}
+			]
+		},
+		{
+			"id": "bc74f1de-e483-4fa1-bef2-0dd55fad3092",
+			"name": "Categorize transaction - Transaction not found",
+			"time": 7,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Checking if error code is 404": true
+			},
+			"testPassFailCounts": {
+				"Checking if error code is 404": {
+					"pass": 10,
+					"fail": 0
+				}
+			},
+			"times": [
+				8,
+				8,
+				8,
+				7,
+				7,
+				8,
+				8,
+				7,
+				8,
+				7
+			],
+			"allTests": [
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				}
+			]
+		},
+		{
+			"id": "17715376-3869-4aa0-bc8f-9f1332f40360",
+			"name": "Categorize transaction - Category not found",
+			"time": 8,
+			"responseCode": {
+				"code": 404,
+				"name": "Not Found"
+			},
+			"tests": {
+				"Checking if error code is 404": true
+			},
+			"testPassFailCounts": {
+				"Checking if error code is 404": {
+					"pass": 10,
+					"fail": 0
+				}
+			},
+			"times": [
+				7,
+				6,
+				6,
+				6,
+				8,
+				7,
+				6,
+				6,
+				6,
+				8
+			],
+			"allTests": [
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				},
+				{
+					"Checking if error code is 404": true
+				}
+			]
+		}
+	],
+	"count": 10,
+	"totalTime": 318,
+	"collection": {
+		"requests": [
+			{
+				"id": "df727e96-92bd-44f5-849d-31fcc3900486",
+				"method": "POST"
+			},
+			{
+				"id": "40c15c75-ddf7-4468-a594-a5f79bdf01c0",
+				"method": "POST"
+			},
+			{
+				"id": "f5cd48c7-9202-4e8e-a806-723707a573d7",
+				"method": "POST"
+			},
+			{
+				"id": "bc74f1de-e483-4fa1-bef2-0dd55fad3092",
+				"method": "POST"
+			},
+			{
+				"id": "17715376-3869-4aa0-bc8f-9f1332f40360",
+				"method": "POST"
+			}
+		]
+	}
+}
