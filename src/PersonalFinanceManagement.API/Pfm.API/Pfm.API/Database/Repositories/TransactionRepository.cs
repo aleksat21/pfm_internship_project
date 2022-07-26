@@ -254,7 +254,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                 return ErrorHandling.TRANSACTION_DOESNT_EXIST;
             }
 
-            if (splitTransactionCommand.splits.Select(s => (int)s.Amount).Sum() != (int)transaction.Amount)
+            if (splitTransactionCommand.splits.Select(s => s.Amount).Sum() != transaction.Amount)
             {
                 // Bussiness logic , transaction over amount
                 return ErrorHandling.SPLIT_AMOUNT_OVER_LIMIT;
