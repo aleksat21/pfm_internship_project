@@ -21,7 +21,7 @@ namespace PersonalFinanceManagement.API.Mappings
             CreateMap<SplitTransactionEntity, SingleTransactionWithSplit>().ReverseMap();
             CreateMap<TransactionEntity, TransactionWithSplits>().ForMember(
                 d => d.Splits, opts => opts.MapFrom(s => s.SplitTransactions.ToList()))
-                .AfterMap((src, dest) => dest.Splits = dest.Splits.ToListOrNullIfEmpty());
+                .AfterMap((src, dest) => dest.Splits = dest.Splits.ToListOrNullIfEmpty()).ReverseMap();
 
             CreateMap<Transaction, TransactionEntity>().ReverseMap();
             CreateMap<Category, CategoryEntity>().ReverseMap();

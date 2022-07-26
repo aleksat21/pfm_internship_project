@@ -26,11 +26,12 @@
 
         <button mat-icon-button color="primary" matTooltip="Confirm category"
             (click)="categorizeTransaction()" aria-label="Example icon button with a bookmark icon">
-            <mat-icon>check_circle</mat-icon>
+              <mat-icon>check_circle</mat-icon>
+              <span>  Add category</span>
         </button>
 
         <mat-card-actions allign="end">
-            <button mat-button (click)="back()">BACK</button>
+            <button style="background-color: red" id="back-button" mat-button (click)="back()">BACK</button>
         </mat-card-actions>
 
     </mat-card-content>

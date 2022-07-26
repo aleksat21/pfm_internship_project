@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { TransactionsService } from '../infrastructure/transactions.service';
-import { IGetCategoriesResponse } from '../models/GetTransactionsModels/IGetCategoriesResponse';
+import { IGetCategoriesResponse } from '../models/GetCategoriesModels/IGetCategoriesResponse';
 import { IGetTransactionsResponse } from '../models/GetTransactionsModels/IGetTransactionsResponse';
 import { CategorizeView } from '../models/PostCategorizeModels/CategorizeView';
 import { ICategorizeRequest } from '../models/PostCategorizeModels/ICategorizeRequest';

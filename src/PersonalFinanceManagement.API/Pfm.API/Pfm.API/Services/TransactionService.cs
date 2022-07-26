@@ -100,5 +100,16 @@ namespace PersonalFinanceManagement.API.Services
                     break;
             }
         }
+
+        public async Task<TransactionWithSplits> GetTransactionDetails(string id)
+        {
+            var result = await _transactionRepository.GetTransactionDetails(id);
+
+            if (result == null)
+            {
+                throw new TransactionNotFoundException($"{id}");
+            }
+            return _mapper.Map<TransactionWithSplits>(result);
+        }
     }
 }

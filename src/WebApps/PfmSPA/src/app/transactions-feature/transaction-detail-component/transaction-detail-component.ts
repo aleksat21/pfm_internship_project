@@ -3,9 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common'
 import { TransactionsFacadeService } from 'src/app/domain/application-services/transactions-facade.service';
-import { CategoryView } from 'src/app/domain/models/GetTransactionsModels/CategoryView';
 import { map, startWith, switchMap } from 'rxjs';
 import { TransactionView } from 'src/app/domain/models/GetTransactionsModels/TransactionView';
+import { CategoryView } from 'src/app/domain/models/GetCategoriesModels/CategoryView';
 
 @Component({
   selector: 'app-user-details',

@@ -9,9 +9,10 @@ import {catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { TransactionsFacadeService } from 'src/app/domain/application-services/transactions-facade.service';
 import { MatDatepicker } from '@angular/material/datepicker';
 import {FormGroup, FormControl} from '@angular/forms';
-import { CategoryView } from 'src/app/domain/models/GetTransactionsModels/CategoryView';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import { TransactionView } from 'src/app/domain/models/GetTransactionsModels/TransactionView';
+import { formatDate } from '@angular/common';
+import { CategoryView } from 'src/app/domain/models/GetCategoriesModels/CategoryView';
 
 @Component({
   selector: 'app-transactions-component',
@@ -73,10 +74,9 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   constructor(
-     public dialog: MatDialog,
+      public dialog: MatDialog,
       private transactionsService : TransactionsFacadeService ,
-      private router : Router
-      
+      private router : Router,      
   ) { }
 
 
@@ -132,8 +132,8 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
           let kind_detail  = this.kinds.find(f => f.value == t.kind)!
           
           if (t.kind != undefined)
-            t.kind = kind_detail.viewValue 
-
+            t.kind = kind_detail.viewValue
+          t.date =  formatDate(t.date, 'dd-MM-yyyy', 'en-US')
         })
         return data.items
       })

@@ -22,12 +22,14 @@ import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { TransactionDetailsComponent } from './transactions-feature/transaction-detail-component/transaction-detail-component';
+import { SplitTransactionDetailsComponent } from './transactions-feature/split-transaction-details-component/split-transaction-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TransactionsComponent,
-    TransactionDetailsComponent
+    TransactionDetailsComponent,
+    SplitTransactionDetailsComponent
   ],
   imports: [
     BrowserModule,

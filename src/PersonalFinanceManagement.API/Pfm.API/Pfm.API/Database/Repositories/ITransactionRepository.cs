@@ -33,5 +33,6 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
         Task<ErrorHandling> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand);
 
+        Task<TransactionEntity> GetTransactionDetails(string id);
     }
 }

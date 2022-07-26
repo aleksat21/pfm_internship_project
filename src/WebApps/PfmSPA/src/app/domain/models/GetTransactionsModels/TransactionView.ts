@@ -1,7 +1,7 @@
 export interface TransactionView {
     id : string,
     beneficiaryName : string,
-    date : Date,
+    date : string,
     direction : string,
     amount : number,
     description : string,

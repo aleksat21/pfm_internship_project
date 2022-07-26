@@ -19,8 +19,6 @@
       <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
 
-    <!--  -->
-
     <form [formGroup] = "fgKind">
       <mat-form-field appearance="fill">
         <mat-label>Kind</mat-label>
@@ -109,11 +107,17 @@
     
               <ng-container matColumnDef="catcode">
                 <th mat-header-cell *matHeaderCellDef> Category </th>
-                <td mat-cell *matCellDef="let element"> {{element.catcode}} </td>
+                <td mat-cell *matCellDef="let element">
+                  <div *ngIf="element.catcode == 'Split'; then thenBlock else elseBlock"></div>
+                    <ng-template #thenBlock>
+                      <a [routerLink]="['/transactions', element.id , 'splits']">{{element.catcode}}</a>
+                    </ng-template>
+                    <ng-template #elseBlock>{{element.catcode}}</ng-template> 
+                  </td>
               </ng-container>
 
               <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef> Action category </th>
+                <th mat-header-cell *matHeaderCellDef> Select category </th>
                 <td mat-cell *matCellDef="let element">
                     <button mat-button color="primary"
                         (click)="showTransactionDetails(element.id)" aria-label="Example icon button with a bookmark icon">
@@ -131,6 +135,3 @@
     </mat-card>
   </mat-drawer-content>
 </mat-drawer-container>
-
-
-<app-user-details></app-user-details>

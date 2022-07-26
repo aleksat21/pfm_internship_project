@@ -6,6 +6,7 @@ using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models.Analytics;
 using PersonalFinanceManagement.API.Models.Categories;
+using PersonalFinanceManagement.API.Models.Pages;
 using PersonalFinanceManagement.API.Models.SortOrders;
 using PersonalFinanceManagement.API.Services;
 
@@ -108,6 +109,14 @@ namespace PersonalFinanceManagement.API.Controllers
             await _serviceTransactions.SplitTransaction(id, splitTransactionCommand);
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("transaction/{id}")]
+        public async Task<ActionResult<TransactionWithSplits>> GetTransactionDetails([FromRoute] string id)
+        {
+            var result = await _serviceTransactions.GetTransactionDetails(id);
+            return Ok(result);
         }
 
 

@@ -3,10 +3,10 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { SortDirection } from '@angular/material/sort';
 import { Observable } from 'rxjs';
 import { IGetTransactionsResponse } from '../models/GetTransactionsModels/IGetTransactionsResponse';
-import { IGetCategoriesRequest } from '../models/GetTransactionsModels/IGetCategoriesRequest';
-import { IGetCategoriesResponse } from '../models/GetTransactionsModels/IGetCategoriesResponse';
+import { IGetCategoriesRequest } from '../models/GetCategoriesModels/IGetCategoriesRequest';
 import { IGetTransactionsRequest } from '../models/GetTransactionsModels/IGetTransactionRequest';
 import { ICategorizeRequest } from '../models/PostCategorizeModels/ICategorizeRequest';
+import { IGetCategoriesResponse } from '../models/GetCategoriesModels/IGetCategoriesResponse';
 
 @Injectable({
   providedIn: 'root'
