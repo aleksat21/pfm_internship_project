@@ -130,6 +130,7 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
               t.catcode = category.name
           }
           let kind_detail  = this.kinds.find(f => f.value == t.kind)!
+          t.direction = t.direction == 'd' ? "Debit" : "Credit"
           
           if (t.kind != undefined)
             t.kind = kind_detail.viewValue

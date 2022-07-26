@@ -3,6 +3,8 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { TransactionsService } from '../infrastructure/transactions.service';
 import { IGetCategoriesResponse } from '../models/GetCategoriesModels/IGetCategoriesResponse';
 import { IGetTransactionsResponse } from '../models/GetTransactionsModels/IGetTransactionsResponse';
+import { IGetTransactionWithSplitsRequest } from '../models/GetTransactionWithSplitsModel/IGetTransactionWithSplitsRequest';
+import { IGetTransactionWithSplitsResponse } from '../models/GetTransactionWithSplitsModel/IGetTransactionWithSplitsResponse';
 import { CategorizeView } from '../models/PostCategorizeModels/CategorizeView';
 import { ICategorizeRequest } from '../models/PostCategorizeModels/ICategorizeRequest';
 
@@ -13,6 +15,19 @@ export class TransactionsFacadeService {
 
   constructor(private transactionsService : TransactionsService) { }
 
+  public getTransactionDetails(id : string){
+    const request : IGetTransactionWithSplitsRequest = {id}
+
+    return this.transactionsService.getTransactionDetails(request).pipe(
+      map((response : IGetTransactionWithSplitsResponse) => {
+        return response;
+      }),
+      catchError((err) => {
+        console.log(err)
+        return of(err)
+      })
+    )
+  }
 
   public categorize(id : string, catcode : string){
     const catView : CategorizeView = {catcode : catcode}

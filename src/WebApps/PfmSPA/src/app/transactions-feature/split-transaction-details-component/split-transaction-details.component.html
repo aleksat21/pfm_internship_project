@@ -1,1 +1,65 @@
-<p>split-transaction-details works!</p>
+<mat-card class="user-card">
+    <mat-card-title>Split transactions</mat-card-title>
+    <mat-card-subtitle>
+        <div>
+            <p>{{transactionId}}</p>
+        </div>
+        </mat-card-subtitle>
+    <mat-card-content>
+        <mat-list>
+            <div mat-subheader>Details</div>
+            <mat-list-item>
+                <div mat-line>ID : {{transactionId}}</div>
+            </mat-list-item>
+
+            <mat-list-item>
+                <div mat-line>Total amount : {{amount}}</div>
+            </mat-list-item>
+
+            <mat-list-item>
+                <div mat-line>Beneficiary name: {{beneficiaryName}}</div>
+            </mat-list-item>
+
+            <mat-list-item>
+                <div mat-line>Date: {{date}}</div>
+            </mat-list-item>
+
+            <mat-list-item>
+                <div mat-line>Description: {{description}}</div>
+            </mat-list-item>
+
+            <mat-list-item>
+                <div mat-line>Currency: {{currency}}</div>
+            </mat-list-item>
+
+            <mat-list-item>
+                <div mat-line>Direction: {{direction}}</div>
+            </mat-list-item>
+
+            <mat-list-item>
+                <div mat-line>Mcc: {{mcc}}</div>
+            </mat-list-item>
+
+            <mat-list-item>
+                <div mat-line>Kind: {{kind}}</div>
+            </mat-list-item>
+            
+            <mat-list-item>
+                <div mat-line>Category: {{category}}</div>
+            </mat-list-item>
+            
+            <mat-divider></mat-divider>
+            <div mat-subheader>Splits</div>
+
+            <mat-list-item *ngFor="let split of splits">
+                <div mat-line>Categry: {{split.catcode}}</div>
+                <div mat-line>Amount: {{split.amount}} </div>
+            </mat-list-item>
+          </mat-list>
+
+          <mat-card-actions allign="end">
+            <button style="background-color: red" id="back-button" mat-button (click)="back()">BACK</button>
+        </mat-card-actions>
+          
+    </mat-card-content>
+  </mat-card>

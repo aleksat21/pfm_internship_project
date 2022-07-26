@@ -7,6 +7,8 @@ import { IGetCategoriesRequest } from '../models/GetCategoriesModels/IGetCategor
 import { IGetTransactionsRequest } from '../models/GetTransactionsModels/IGetTransactionRequest';
 import { ICategorizeRequest } from '../models/PostCategorizeModels/ICategorizeRequest';
 import { IGetCategoriesResponse } from '../models/GetCategoriesModels/IGetCategoriesResponse';
+import { IGetTransactionWithSplitsRequest } from '../models/GetTransactionWithSplitsModel/IGetTransactionWithSplitsRequest';
+import { IGetTransactionWithSplitsResponse } from '../models/GetTransactionWithSplitsModel/IGetTransactionWithSplitsResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +16,13 @@ import { IGetCategoriesResponse } from '../models/GetCategoriesModels/IGetCatego
 export class TransactionsService {
 
   constructor(private http : HttpClient) { }
+
+  public getTransactionDetails(request : IGetTransactionWithSplitsRequest){
+    let url = "http://localhost:8001/api/v1/PersonalFinanceManagement/transaction/" + request.id;
+
+    return this.http.get<IGetTransactionWithSplitsResponse>(url);
+    
+  }
 
   public categorize(request : ICategorizeRequest) : Observable<Object>{
     let url = "http://localhost:8001/api/v1/PersonalFinanceManagement/transactions/" + request.id + "/categorize"

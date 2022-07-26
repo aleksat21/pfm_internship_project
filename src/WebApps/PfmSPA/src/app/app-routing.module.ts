@@ -13,7 +13,7 @@ const routes: Routes = [
     component: TransactionDetailsComponent
   },
   {
-    path: 'transactions/:id/splits',
+    path: 'transactions/:transactionId/splits',
     component: SplitTransactionDetailsComponent
   }
 ];
