@@ -119,10 +119,15 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
                 if (categoryEntity != null)
                 {
-                    categoryEntity.ParentCode = category.ParentCode;
                     categoryEntity.Name = category.Name;
 
+                    if (categoryEntity.ParentCode != null)
+                    {
+                        categoryEntity.ParentCode = categoryEntity.ParentCode;
+                    }
+
                     _dbContext.Entry(categoryEntity).State = EntityState.Modified;
+
                 }
                 else
                 {
