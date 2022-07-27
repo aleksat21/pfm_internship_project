@@ -7,6 +7,7 @@ using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models.Analytics;
 using PersonalFinanceManagement.API.Models.Categories;
 using PersonalFinanceManagement.API.Models.ExceptionHandling;
+using PersonalFinanceManagement.API.Models.ExceptionHandling.Exceptions.DomainExceptions;
 using PersonalFinanceManagement.API.Models.Pages;
 using PersonalFinanceManagement.API.Models.SortOrders;
 
@@ -26,7 +27,14 @@ namespace PersonalFinanceManagement.API.Database.Repositories
         public async Task ImportTransactionsFromCSV(CreateTransactionListDTO transactions)
         {
             await _dbContext.Transactions.AddRangeAsync(_mapper.Map<IEnumerable<TransactionEntity>>(transactions.Transactions));
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+
+            } catch (Exception e)
+            {
+                throw new ImportFromCsvException(e.InnerException.Message);
+            }
         }
         public async Task<PagedSortedList<TransactionEntity>> GetTransactions(
             DateTime startDate,
@@ -113,28 +121,35 @@ namespace PersonalFinanceManagement.API.Database.Repositories
 
         public async Task ImportCategoriesFromCSV(CreateCategoryListDTO categories)
         {
-            foreach (var category in categories.Categories)
+            try
             {
-                var categoryEntity = await _dbContext.Categories.FindAsync(category.Code);
-
-                if (categoryEntity != null)
+                foreach (var category in categories.Categories)
                 {
-                    categoryEntity.Name = category.Name;
+                    var categoryEntity = await _dbContext.Categories.FindAsync(category.Code);
 
-                    if (categoryEntity.ParentCode != null)
+                    if (categoryEntity != null)
                     {
-                        categoryEntity.ParentCode = categoryEntity.ParentCode;
+                        categoryEntity.Name = category.Name;
+
+                        if (categoryEntity.ParentCode != null)
+                        {
+                            categoryEntity.ParentCode = categoryEntity.ParentCode;
+                        }
+
+                        _dbContext.Entry(categoryEntity).State = EntityState.Modified;
+
+                    }
+                    else
+                    {
+                        await _dbContext.AddAsync(_mapper.Map<CategoryEntity>(category));
                     }
 
-                    _dbContext.Entry(categoryEntity).State = EntityState.Modified;
-
+                    await _dbContext.SaveChangesAsync();
                 }
-                else
-                {
-                    await _dbContext.AddAsync(_mapper.Map<CategoryEntity>(category));
-                }
-
-                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                throw new ImportFromCsvException(e.InnerException.Message);
             }
         }
 
