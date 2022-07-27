@@ -95,7 +95,9 @@ namespace PersonalFinanceManagement.API.Services
                 case ErrorHandling.TRANSACTION_DOESNT_EXIST:
                     throw new TransactionNotFoundException(id);
                 case ErrorHandling.SPLIT_AMOUNT_OVER_LIMIT:
-                    throw new SplitTransactionOverLimitException(splitTransactionCommand.splits.Select(s => s.Amount).Sum());
+                    var splitAmount = splitTransactionCommand.splits.Select(s => s.Amount).Sum();
+                    var totalAmount = SplitTransactionOverAmountValue.totalTransactionValue;
+                    throw new SplitTransactionOverLimitException(splitAmount, totalAmount);
                 default:
                     break;
             }

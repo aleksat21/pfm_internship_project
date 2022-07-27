@@ -1,5 +1,10 @@
 ﻿namespace PersonalFinanceManagement.API.Models.ExceptionHandling
 {
+    public static class SplitTransactionOverAmountValue
+    {
+        public static double totalTransactionValue = 0.0;
+    }
+
     public enum ErrorHandling
     {
         TRANSACTION_DOESNT_EXIST,

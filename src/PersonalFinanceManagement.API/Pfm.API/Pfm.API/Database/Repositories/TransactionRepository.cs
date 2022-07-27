@@ -277,6 +277,7 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             if (splitTransactionCommand.splits.Select(s => s.Amount).Sum() != transaction.Amount)
             {
                 // Bussiness logic , transaction over amount
+                SplitTransactionOverAmountValue.totalTransactionValue = transaction.Amount;
                 return ErrorHandling.SPLIT_AMOUNT_OVER_LIMIT;
             }
 
