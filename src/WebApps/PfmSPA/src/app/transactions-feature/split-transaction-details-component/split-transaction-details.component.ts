@@ -58,41 +58,43 @@ export class SplitTransactionDetailsComponent implements OnInit, AfterViewInit {
     this.location.back()
   }
   ngAfterViewInit(): void {
-    this.transactionsService.getTransactionDetails(this.transactionId).subscribe((data : IGetTransactionWithSplitsResponse) =>{
-      this.category = "Split"
-      
-      this.amount = data.amount
-      this.beneficiaryName = data.beneficiaryName
-      this.currency = data.currency
-      this.description = data.description
-      
-      this.direction = data.direction == 'd' ? "Debits" : "Credits"
-      this.date = formatDate(data.date, 'dd-MM-yyyy', 'en-us')
-      
-      let kind_detail  = this.kinds.find(f => f.value == data.kind)!
-      this.kind = kind_detail.viewValue
 
-      this.mcc = data.mcc
-
-      data.splits.map(t => {
-        let category : CategoryView  = this.categories.find(c => c.code === t.catcode)!      
-        t.catcode = category.name
-      })
-
-      data.splits.forEach(element => {
-        this.splits.push(element)
-      });
-    })
   }
 
   ngOnInit(): void {
-    this.transactionsService.getCategories().subscribe(data => (this.categories = data))
-
     this.activatedRoute.params.subscribe((params) => {
       this.transactionId = params['transactionId']
     })
-  }
 
+    this.transactionsService.getCategories().subscribe(data => {
+        this.categories = data;
+
+        this.transactionsService.getTransactionDetails(this.transactionId).subscribe((data : IGetTransactionWithSplitsResponse) => {
+        this.category = "Split"
+      
+        this.amount = data.amount
+        this.beneficiaryName = data.beneficiaryName
+        this.currency = data.currency
+        this.description = data.description
+        
+        this.direction = data.direction == 'd' ? "Debits" : "Credits"
+        this.date = formatDate(data.date, 'dd-MM-yyyy', 'en-us')
+        
+        let kind_detail  = this.kinds.find(f => f.value == data.kind)!
+        this.kind = kind_detail.viewValue
+  
+        this.mcc = data.mcc
+  
+        data.splits.map(t => {
+          let category : CategoryView  = this.categories.find(c => c.code === t.catcode)!      
+          t.catcode = category.name
+        })
+  
+        this.splits = data.splits
+      })
+    
+    }) 
+  }
 }
 
 interface Kind {
