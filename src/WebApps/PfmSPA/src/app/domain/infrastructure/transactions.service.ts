@@ -9,6 +9,8 @@ import { ICategorizeRequest } from '../models/PostCategorizeModels/ICategorizeRe
 import { IGetCategoriesResponse } from '../models/GetCategoriesModels/IGetCategoriesResponse';
 import { IGetTransactionWithSplitsRequest } from '../models/GetTransactionWithSplitsModel/IGetTransactionWithSplitsRequest';
 import { IGetTransactionWithSplitsResponse } from '../models/GetTransactionWithSplitsModel/IGetTransactionWithSplitsResponse';
+import { IGetAnalyticsRequest } from '../models/GetAnalyticsModel/IGetAnalyticsRequest';
+import { IGetAnalyticsResponse } from '../models/GetAnalyticsModel/IGetAnalyticsResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +44,24 @@ export class TransactionsService {
     return this.http.get<IGetCategoriesResponse>(url, {
       params : queryParams
     })
+  }
+
+  public getAnalyticsData(request : IGetAnalyticsRequest) : Observable<IGetAnalyticsResponse>
+  {
+    let url = "http://localhost:8001/api/v1/PersonalFinanceManagement/spending-analytics"
+
+    let queryParams = new HttpParams();
+
+    if (request.startDate != undefined){
+      queryParams = queryParams.append("startDate", request.startDate.toDateString())
+    }
+    if (request.endDate != undefined){
+      queryParams = queryParams.append("endDate", request.endDate.toDateString())
+    }
+
+    return this.http.get<IGetAnalyticsResponse>(url, {
+      params : queryParams
+    })  
   }
 
   public getTransactions(request : IGetTransactionsRequest) : Observable<IGetTransactionsResponse>

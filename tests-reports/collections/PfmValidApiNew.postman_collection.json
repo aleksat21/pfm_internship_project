@@ -1,0 +1,575 @@
+{
+	"info": {
+		"_postman_id": "cbe1d6bb-548d-498a-8cd3-32323649bae6",
+		"name": "PfmValidApiNew",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "22315769"
+	},
+	"item": [
+		{
+			"name": "Get paged transactions",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.globals.set(\"loadUtils\", function loadUtils() {\r",
+							"    let utils = {};\r",
+							"    utils.randomIntFromInterval = function (min, max) {\r",
+							"        return Math.floor(Math.random() * (max - min + 1) + min)\r",
+							"    };\r",
+							"    utils.getRandomStartDate = function() {\r",
+							"        return new Date(2021, utils.randomIntFromInterval(1, 11), utils.randomIntFromInterval(1, 28))\r",
+							"    };\r",
+							"    utils.getRandomEndDate = function(startDate){\r",
+							"        let dateTo = new Date(startDate.getTime())\r",
+							"        return dateTo.setMonth(dateTo.getMonth() + 12)\r",
+							"    }\r",
+							"    utils.getRandomTopCategory = function(){\r",
+							"         var categories = Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'E', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'Z')\r",
+							"         return categories[Math.floor(Math.random()*categories.length)];\r",
+							"    }\r",
+							"    utils.getRandomCategory = function(){\r",
+							"        var categories = Array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'E', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'R', 'S', 'T', 'Z', 'O', '1', '2',\r",
+							"        '3', '4', '5', '7', '8', '10', '11', '12', '13', '15', '17', '20', '21', '22', '23', '25', '26', '28', '33', '38', '39', '41', '42', '44', '45', '46',\r",
+							"        '47', '48', '49', '50', '53', '54', '55', '56', '58', '59', '60', '61', '62', '64', '67', '68', '71', '72', '74', '77', '80', '82', '83', '84', '85',\r",
+							"        '86', '88', '89', '90', '92', '96', '98', '100', '103', '104', '105', '106')\r",
+							"\r",
+							"        return categories[Math.floor(Math.random()*categories.length)];\r",
+							"    };\r",
+							"    utils.getRandomDirection = function(){\r",
+							"        var directions = Array('d', 'c')\r",
+							"        return directions[Math.floor(Math.random()*directions.length)];\r",
+							"    };\r",
+							"    return utils;\r",
+							"} + '; loadUtils();');\r",
+							"\r",
+							"const utils = eval(globals.loadUtils);\r",
+							"\r",
+							"pm.environment.set(\"page\", utils.randomIntFromInterval(1, 5))\r",
+							"pm.environment.set(\"startDate\", utils.getRandomStartDate())"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"pageSize\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"page\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"totalCount\": {\r",
+							"      \"type\": \"integer\"\r",
+							"    },\r",
+							"    \"sortBy\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"sortOrder\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"items\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": \"object\",\r",
+							"          \"properties\": {\r",
+							"            \"id\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"beneficiaryName\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"date\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"direction\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"amount\": {\r",
+							"              \"type\": \"number\"\r",
+							"            },\r",
+							"            \"description\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"currency\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"mcc\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"kind\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"catcode\" : {\r",
+							"                \"type\" : \"string\"\r",
+							"            },\r",
+							"            \"splits\" : {\r",
+							"                \"type\" : \"array\",\r",
+							"                \"splits\" : [\r",
+							"                    {\r",
+							"                        \"type\" : \"object\",\r",
+							"                        \"properties\" : {\r",
+							"                            \"catcode\" : \"amount\",\r",
+							"                            \"amount\" : \"number\"\r",
+							"                        }\r",
+							"                    }\r",
+							"                ]         \r",
+							"            }\r",
+							"          },\r",
+							"          \"required\": [\r",
+							"            \"id\",\r",
+							"            \"beneficiaryName\",\r",
+							"            \"date\",\r",
+							"            \"direction\",\r",
+							"            \"amount\",\r",
+							"            \"description\",\r",
+							"            \"currency\",\r",
+							"            \"kind\"\r",
+							"          ]\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"pageSize\",\r",
+							"    \"page\",\r",
+							"    \"totalCount\",\r",
+							"    \"sortBy\",\r",
+							"    \"sortOrder\",\r",
+							"    \"items\"\r",
+							"  ]\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validating schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema)\r",
+							"})\r",
+							"\r",
+							"const response = pm.response.json()\r",
+							"var transactionId = 15122088;\r",
+							"var splitTransactionId = 24419286;\r",
+							"var splitTransactionAmount = 300.1;\r",
+							"\r",
+							"if (response.items[0] != undefined)\r",
+							"    transactionId = response.items[0].id\r",
+							"if (response.items[1] != undefined){ \r",
+							"    splitTransactionId = response.items[1].id\r",
+							"    splitTransactionAmount = response.items[1].amount\r",
+							"}\r",
+							"\r",
+							"pm.globals.set(\"transactionId\", transactionId)\r",
+							"pm.globals.set(\"splitTransactionAmount\", splitTransactionAmount)\r",
+							"pm.globals.set(\"splitTransactionId\", splitTransactionId)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}transactions?startDate={{startDate}}&page={{page}}&pageSize=5",
+					"host": [
+						"{{url}}transactions"
+					],
+					"query": [
+						{
+							"key": "transactionKind",
+							"value": "pmt",
+							"disabled": true
+						},
+						{
+							"key": "startDate",
+							"value": "{{startDate}}"
+						},
+						{
+							"key": "endDate",
+							"value": "{{dateTo}}",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "{{page}}"
+						},
+						{
+							"key": "pageSize",
+							"value": "5"
+						},
+						{
+							"key": "sortBy",
+							"value": "date",
+							"disabled": true
+						},
+						{
+							"key": "sortOrder",
+							"value": "desc",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get categories",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const schema = {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"items\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": \"object\",\r",
+							"          \"properties\": {\r",
+							"            \"code\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"name\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"parentCode\": {\r",
+							"              \"type\": \"string\"\r",
+							"            }\r",
+							"          },\r",
+							"          \"required\": [\r",
+							"            \"code\",\r",
+							"            \"name\",\r",
+							"            \"parentCode\"\r",
+							"          ],\r",
+							"          \"additionalProperties\" : false\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"items\"\r",
+							"  ]\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validating schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema)\r",
+							"})\r",
+							"\r",
+							"const utils = eval(globals.loadUtils);\r",
+							"\r",
+							"const response = pm.response.json()\r",
+							"\r",
+							"const length = response.items.length\r",
+							"if (utils.randomIntFromInterval(1, 100) <= 50){\r",
+							"    pm.globals.set(\"categorize\", response.items[utils.randomIntFromInterval(0, length - 1)].code)\r",
+							"}\r",
+							"else{\r",
+							"    pm.globals.set(\"categorize\", pm.environment.get(\"category\"))\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const utils = eval(globals.loadUtils);\r",
+							"pm.environment.set(\"category\", utils.getRandomTopCategory())"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}categories?parentId={{category}}",
+					"host": [
+						"{{url}}categories"
+					],
+					"query": [
+						{
+							"key": "parentId",
+							"value": "{{category}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Categorize transactions",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"catcode\": \"{{categorize}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}transactions/:id/categorize",
+					"host": [
+						"{{url}}transactions"
+					],
+					"path": [
+						":id",
+						"categorize"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{transactionId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Split transaction",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var totalSum = parseInt(pm.globals.get(\"splitTransactionAmount\"))\r",
+							"\r",
+							"const utils = eval(globals.loadUtils);\r",
+							"\r",
+							"var category1 = utils.getRandomCategory()\r",
+							"var category2 = 'B'\r",
+							"while ((category2 = utils.getRandomCategory()) == category1){\r",
+							"    \r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"category1\", category1)\r",
+							"pm.environment.set(\"category2\", category2)\r",
+							"\r",
+							"var diff = 0\r",
+							"if (totalSum > 8){\r",
+							"    diff  = utils.randomIntFromInterval(1, 8)\r",
+							"} else if (totalSum > 16){\r",
+							"    diff = utils.randomIntFromInterval(8, 16)\r",
+							"} else if (totalSum > 32){\r",
+							"    diff = utils.randomIntFromInterval(16, 32)    \r",
+							"} else if (totalSum > 64){\r",
+							"    diff = utils.randomIntFromInterval(32, 64)\r",
+							"} else if (totalSum > 128){\r",
+							"    diff = utils.randomIntFromInterval(64, 128)\r",
+							"}\r",
+							"\r",
+							"pm.environment.set(\"amount1\", totalSum - diff)\r",
+							"pm.environment.set(\"amount2\", totalSum - (totalSum - diff))"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\",  () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"splits\": [\r\n    {\r\n      \"catcode\": \"{{category1}}\",\r\n      \"amount\": {{amount1}}\r\n    },\r\n    {\r\n      \"catcode\": \"{{category2}}\",\r\n      \"amount\": {{amount2}}\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}transaction/:id/split",
+					"host": [
+						"{{url}}transaction"
+					],
+					"path": [
+						":id",
+						"split"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "{{splitTransactionId}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get analytics",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const utils = eval(globals.loadUtils);\r",
+							"\r",
+							"var categoryToSplit = pm.globals.get(\"splitTransactionId\")\r",
+							"\r",
+							"pm.environment.set('category', categoryToSplit) \r",
+							"pm.environment.set('direction', utils.getRandomDirection()) \r",
+							"\r",
+							"var dateFrom = utils.getRandomStartDate()\r",
+							"var dateTo = utils.getRandomEndDate(dateFrom)\r",
+							"\r",
+							"pm.environment.set('dateFrom', dateFrom) \r",
+							"pm.environment.set('dateTo', dateTo) \r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const schema = {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"groups\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": \"object\",\r",
+							"          \"properties\": {\r",
+							"            \"catcode\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"amount\": {\r",
+							"              \"type\": \"number\"\r",
+							"            },\r",
+							"            \"count\": {\r",
+							"              \"type\": \"integer\"\r",
+							"            }\r",
+							"          },\r",
+							"          \"required\": [\r",
+							"            \"catcode\",\r",
+							"            \"amount\",\r",
+							"            \"count\"\r",
+							"          ],\r",
+							"          \"additionalProperties\" : false\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"groups\"\r",
+							"  ],\r",
+							"  \"additionalProperties\" : false\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Validating schema\", () => {\r",
+							"    pm.response.to.have.jsonSchema(schema)\r",
+							"})\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}spending-analytics",
+					"host": [
+						"{{url}}spending-analytics"
+					],
+					"query": [
+						{
+							"key": "catCode",
+							"value": "{{category}}",
+							"disabled": true
+						},
+						{
+							"key": "startDate",
+							"value": "{{dateFrom}}",
+							"disabled": true
+						},
+						{
+							"key": "endDate",
+							"value": "{{dateTo}}",
+							"disabled": true
+						},
+						{
+							"key": "direction",
+							"value": "{{direction}}",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:8001/api/v1/PersonalFinanceManagement/"
+		}
+	]
+}

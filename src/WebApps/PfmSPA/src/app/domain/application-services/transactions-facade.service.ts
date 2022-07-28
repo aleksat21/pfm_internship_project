@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of } from 'rxjs';
 import { TransactionsService } from '../infrastructure/transactions.service';
+import { IGetAnalyticsRequest } from '../models/GetAnalyticsModel/IGetAnalyticsRequest';
+import { IGetAnalyticsResponse } from '../models/GetAnalyticsModel/IGetAnalyticsResponse';
+import { SingleCategoryAnalyticsView } from '../models/GetAnalyticsModel/SingleCategoryAnalyticsView';
 import { IGetCategoriesResponse } from '../models/GetCategoriesModels/IGetCategoriesResponse';
 import { IGetTransactionsResponse } from '../models/GetTransactionsModels/IGetTransactionsResponse';
 import { IGetTransactionWithSplitsRequest } from '../models/GetTransactionWithSplitsModel/IGetTransactionWithSplitsRequest';
@@ -58,6 +61,20 @@ export class TransactionsFacadeService {
     )
   }
 
+  public getAnalyticsData(startDate? : Date, endDate? : Date) : Observable<SingleCategoryAnalyticsView[]>{
+    const request : IGetAnalyticsRequest = {startDate : startDate, endDate : endDate}
+
+    return this.transactionsService.getAnalyticsData(request).pipe(
+      map((response : IGetAnalyticsResponse) => {
+        return response.groups
+      }),
+      catchError((err) => {
+        console.log(err)
+        return of(err)
+      })
+    )
+  }
+
   public getTransactions(page : number, pageSize : number, startDate? : Date , endDate? : Date, kind = "all", sortBy = "date", orderByDirection = "asc") : Observable<IGetTransactionsResponse>{
     const request = {page , pageSize, startDate, endDate, kind, sortBy, orderByDirection}
 
@@ -66,6 +83,7 @@ export class TransactionsFacadeService {
         return response;
       }),
       catchError((err) => {
+        console.log(err)
         return of(err)
       })
     )

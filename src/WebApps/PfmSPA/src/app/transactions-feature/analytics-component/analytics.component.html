@@ -1,0 +1,60 @@
+<mat-list>
+    <div style="margin-bottom: 20px;" mat-subheader>Analytics for {{startDateString}}- {{endDateString}}</div>
+    <mat-list-item *ngFor="let topCat of topTiesCategoriesData">
+        <div mat-line style="margin-bottom: 30px;">
+            <div mat-line>
+                {{categoriesViewMap.get(topCat.catcode)!}}
+              </div>
+              <div mat-line>
+                <p>
+                    Total transactions count: {{topCat.count}}
+                    <br>
+                    Total amount: {{topCat.amount}}
+                </p>
+              </div>
+              <div mat-line>
+                <mat-accordion>
+                    <mat-expansion-panel hideToggle style="background-color: rgb(230, 219, 219);">
+                        <mat-expansion-panel-header>
+                          <mat-panel-title>
+                            Show subcategories spendings
+                          </mat-panel-title>
+                          <mat-panel-description>
+                            Table data
+                          </mat-panel-description>
+                        </mat-expansion-panel-header>
+                        <p>This is the primary content of the panel.</p>
+                        <table mat-table [dataSource]="dataSourceMap.get(topCat.catcode)!" class="mat-elevation-z8">
+
+                            <ng-container matColumnDef="catcode">
+                              <th mat-header-cell *matHeaderCellDef> Name </th>
+                              <td mat-cell *matCellDef="let element"> {{categoriesViewMap.get(element.catcode)!}} </td>
+                            </ng-container>
+                          
+                            <ng-container matColumnDef="count">
+                              <th mat-header-cell *matHeaderCellDef> Count </th>
+                              <td mat-cell *matCellDef="let element"> {{element.count}} </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="amount">
+                                <th mat-header-cell *matHeaderCellDef> Amount </th>
+                                <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+                            </ng-container>
+                          
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                          </table>
+                      </mat-expansion-panel>
+                </mat-accordion> 
+              </div>
+        </div>
+      
+    </mat-list-item>
+    <!-- <mat-divider></mat-divider> -->
+    <!-- <div mat-subheader>Notes</div>
+    <mat-list-item *ngFor="let note of notes">
+      <mat-icon mat-list-icon>note</mat-icon>
+      <div mat-line>{{note.name}}</div>
+      <div mat-line> {{note.updated | date}} </div>
+    </mat-list-item> -->
+</mat-list>

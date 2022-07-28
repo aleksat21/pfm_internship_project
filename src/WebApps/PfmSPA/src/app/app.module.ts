@@ -24,13 +24,16 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { TransactionDetailsComponent } from './transactions-feature/transaction-detail-component/transaction-detail-component';
 import { SplitTransactionDetailsComponent } from './transactions-feature/split-transaction-details-component/split-transaction-details.component';
 import {MatListModule} from '@angular/material/list';
+import { AnalyticsComponent } from './transactions-feature/analytics-component/analytics.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
     AppComponent,
     TransactionsComponent,
     TransactionDetailsComponent,
-    SplitTransactionDetailsComponent
+    SplitTransactionDetailsComponent,
+    AnalyticsComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,8 @@ import {MatListModule} from '@angular/material/list';
     MatSidenavModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatListModule
+    MatListModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]

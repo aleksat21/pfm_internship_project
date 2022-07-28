@@ -83,6 +83,10 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
   public showTransactionDetails(transactionId: string) {
     this.router.navigate(['transactions/categorize/' + transactionId]);
   }
+
+  public showAnalyticsData(){
+    this.router.navigateByUrl('analytics', { state : {startDate : this.range.value['start'], endDate : this.range.value['end']}})
+  }
   
   
   ngOnInit(): void {
