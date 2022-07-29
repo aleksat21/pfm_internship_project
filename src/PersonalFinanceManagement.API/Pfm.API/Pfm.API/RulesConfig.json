@@ -1,0 +1,14 @@
+{
+  "rules": [
+    {
+      "tile": "When beneficiary name contains chevron or shell, categorize transaction as 4 (Auto & Transport)",
+      "catcode": "4",
+      "predicate": "LOWER(BENEFICIARYNAME) LIKE '%chevron%' OR LOWER(BENEFICIARYNAME) LIKE '%shell%'"
+    },
+    {
+      "tile": "When mcc is 5811 (Caterers) categorize transaction as 39 (Food & Dining / Restaurants)",
+      "catcode": "39",
+      "predicate": "MCC = 5811"
+    }
+  ]
+}

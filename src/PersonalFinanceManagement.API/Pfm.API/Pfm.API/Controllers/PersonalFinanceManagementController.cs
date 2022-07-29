@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models.Analytics;
+using PersonalFinanceManagement.API.Models.AutomaticCategorization;
 using PersonalFinanceManagement.API.Models.Categories;
 using PersonalFinanceManagement.API.Models.Pages;
 using PersonalFinanceManagement.API.Models.SortOrders;
@@ -117,6 +119,14 @@ namespace PersonalFinanceManagement.API.Controllers
         {
             var result = await _serviceTransactions.GetTransactionDetails(id);
             return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("transaction/auto-categorize")]
+        public async Task<ActionResult<string>> AutoCategorize()
+        {
+            await _serviceTransactions.AutoCategorize();
+            return Ok();
         }
 
 

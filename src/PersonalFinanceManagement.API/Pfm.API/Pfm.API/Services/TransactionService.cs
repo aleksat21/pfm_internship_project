@@ -113,5 +113,10 @@ namespace PersonalFinanceManagement.API.Services
             }
             return _mapper.Map<TransactionWithSplits>(result);
         }
+
+        public async Task AutoCategorize()
+        {
+            await _transactionRepository.AutoCategorize();
+        }
     }
 }

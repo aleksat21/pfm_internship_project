@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PersonalFinanceManagement.API.Database.Entities;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Categories;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.SplitTransactions;
 using PersonalFinanceManagement.API.Database.Entities.DTOs.Transactions;
 using PersonalFinanceManagement.API.Models.Analytics;
+using PersonalFinanceManagement.API.Models.AutomaticCategorization;
 using PersonalFinanceManagement.API.Models.Categories;
 using PersonalFinanceManagement.API.Models.ExceptionHandling;
 using PersonalFinanceManagement.API.Models.ExceptionHandling.Exceptions.DomainExceptions;
@@ -17,11 +19,15 @@ namespace PersonalFinanceManagement.API.Database.Repositories
     {
         private readonly TransactionsDbContext _dbContext;
         private readonly IMapper _mapper;
+        private readonly RulesConfig _rulesConfig;
 
-        public TransactionRepository(TransactionsDbContext dbContext, IMapper mapper)
+        public TransactionRepository(TransactionsDbContext dbContext, IMapper mapper, IOptions<RulesConfig> optionsAccessor)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+
+            if (optionsAccessor == null) throw new ArgumentNullException(nameof(optionsAccessor));
+            _rulesConfig = optionsAccessor.Value;
         }
 
         public async Task ImportTransactionsFromCSV(CreateTransactionListDTO transactions)
@@ -324,6 +330,19 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             var transaction = await transaction_query.Where(t => t.Id == id).FirstOrDefaultAsync();
 
             return transaction;
+        }
+
+        public async Task AutoCategorize()
+        {
+            foreach (var rule in _rulesConfig.Rules)
+            {
+                var title = rule.Title;
+                var catcode = rule.Catcode;
+                var predicate = rule.Predicate;
+
+                var query = $"UPDATE DBO.TRANSACTIONS SET CATCODE = {catcode} WHERE {predicate} AND CATCODE IS NULL";
+                await _dbContext.Database.ExecuteSqlRawAsync(query);
+            }
         }
     }
 }

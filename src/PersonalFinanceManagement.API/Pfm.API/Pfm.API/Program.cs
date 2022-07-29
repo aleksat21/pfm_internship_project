@@ -13,6 +13,7 @@ using PersonalFinanceManagement.API.Services;
 using AutoMapper;
 using PersonalFinanceManagement.API.Mappings;
 using PersonalFinanceManagement.API.CustomExceptionMiddleware;
+using PersonalFinanceManagement.API.Models.AutomaticCategorization;
 
 namespace PersonalFinanceManagement.API
 {
@@ -22,6 +23,8 @@ namespace PersonalFinanceManagement.API
         {
             var builder = WebApplication.CreateBuilder(args);
             // Add services to the container.
+
+            builder.Configuration.AddJsonFile("RulesConfig.json", optional: false, reloadOnChange: false);
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -56,6 +59,8 @@ namespace PersonalFinanceManagement.API
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
             });
+
+            builder.Services.Configure<RulesConfig>(builder.Configuration);
 
             var app = builder.Build();
 
