@@ -52,7 +52,7 @@
             <div mat-subheader>Splits</div>
 
             <mat-list-item *ngFor="let split of splits">
-                <div mat-line>Categry: {{split.catcode}}</div>
+                <div mat-line>Categry: {{categoriesViewMap.get(split.catcode)!}}</div>
                 <div mat-line>Amount: {{split.amount}} </div>
             </mat-list-item>
           </mat-list>

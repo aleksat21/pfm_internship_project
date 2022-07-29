@@ -46,7 +46,7 @@ export class SplitTransactionDetailsComponent implements OnInit, AfterViewInit {
   mcc : string
   splits : SingleTransactionWithSplitView[] = []
 
-  categories : CategoryView[] = []
+  public categoriesViewMap : Map<string, string> = new Map<string, string>();
 
   constructor(    
     private activatedRoute: ActivatedRoute,
@@ -66,8 +66,10 @@ export class SplitTransactionDetailsComponent implements OnInit, AfterViewInit {
       this.transactionId = params['transactionId']
     })
 
-    this.transactionsService.getCategories().subscribe(data => {
-        this.categories = data;
+    this.transactionsService.getCategories().subscribe((data : CategoryView[]) => {
+        data.forEach(cat => {
+          this.categoriesViewMap.set(cat.code, cat.name)
+        })
 
         this.transactionsService.getTransactionDetails(this.transactionId).subscribe((data : IGetTransactionWithSplitsResponse) => {
         this.category = "Split"
@@ -84,11 +86,6 @@ export class SplitTransactionDetailsComponent implements OnInit, AfterViewInit {
         this.kind = kind_detail.viewValue
   
         this.mcc = data.mcc
-  
-        data.splits.map(t => {
-          let category : CategoryView  = this.categories.find(c => c.code === t.catcode)!      
-          t.catcode = category.name
-        })
   
         this.splits = data.splits
       })

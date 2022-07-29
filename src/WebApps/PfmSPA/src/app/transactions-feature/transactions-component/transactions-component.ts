@@ -24,6 +24,9 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
   public displayedColumns : string[] = ['id', 'beneficiaryName', 'date', 'direction', 'amount', 'description', 'currency', 'mcc', 'kind', 'catcode', 'action' ]
   public dataSource = new MatTableDataSource<TransactionView>()
 
+  public categoriesViewMap : Map<string, string> = new Map<string, string>()
+  public directionViewMap : Map<string, string> = new Map<string, string>();
+
   categories : CategoryView[] = []
 
   resultsLength = 0;
@@ -90,7 +93,15 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
   
   
   ngOnInit(): void {
-    this.transactionsService.getCategories().subscribe(data => (this.categories = data))
+    this.transactionsService.getCategories().subscribe((data : CategoryView[]) => {
+      data.forEach(cat => {
+        this.categoriesViewMap.set(cat.code, cat.name)
+      })
+      console.log(this.categoriesViewMap)
+    })
+
+    this.directionViewMap.set("d", "Debits")
+    this.directionViewMap.set("c", "Credits")
 
     this.fgKind = new FormGroup({
       kindFormControl : new FormControl(this.selectedKindOption)
@@ -126,18 +137,8 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
         if (data === null){
           return []
         }
-
         this.resultsLength = data.totalCount
         data.items.map(t => {
-          let category : (CategoryView | undefined)  = this.categories.find(c => c.code == t.catcode)
-          if (category != undefined){
-              t.catcode = category.name
-          }
-          let kind_detail  = this.kinds.find(f => f.value == t.kind)!
-          t.direction = t.direction == 'd' ? "Debit" : "Credit"
-          
-          if (t.kind != undefined)
-            t.kind = kind_detail.viewValue
           t.date =  formatDate(t.date, 'dd-MM-yyyy', 'en-US')
         })
         return data.items
