@@ -61,8 +61,8 @@ export class TransactionsFacadeService {
     )
   }
 
-  public getAnalyticsData(startDate? : Date, endDate? : Date) : Observable<SingleCategoryAnalyticsView[]>{
-    const request : IGetAnalyticsRequest = {startDate : startDate, endDate : endDate}
+  public getAnalyticsData(startDate? : Date, endDate? : Date, direction? : string) : Observable<SingleCategoryAnalyticsView[]>{
+    const request : IGetAnalyticsRequest = {startDate : startDate, endDate : endDate, direction : direction}
 
     return this.transactionsService.getAnalyticsData(request).pipe(
       map((response : IGetAnalyticsResponse) => {

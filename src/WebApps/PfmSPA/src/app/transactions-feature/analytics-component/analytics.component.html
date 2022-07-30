@@ -1,4 +1,13 @@
 <mat-list>
+    <button (click)="back()" mat-button color="primary" style="background-color: rgb(32, 175, 94); width: 20%;">Back</button>
+    <section>
+      <h4>Button Toggle inside of a Reactive form</h4>
+      <mat-button-toggle-group [formControl] ="directionControl" aria-label="Font Style">
+        <mat-button-toggle value="d">Debits</mat-button-toggle>
+        <mat-button-toggle value="c">Credits</mat-button-toggle>
+      </mat-button-toggle-group>
+      <p>Chosen value is {{directionControl.value}}</p>
+    </section>
     <div style="margin-bottom: 20px;" mat-subheader>Analytics for {{startDateString}}- {{endDateString}}</div>
     <mat-list-item *ngFor="let topCat of topTiesCategoriesData">
         <div mat-line style="margin-bottom: 30px;">

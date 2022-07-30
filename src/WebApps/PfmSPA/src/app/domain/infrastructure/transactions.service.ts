@@ -58,6 +58,10 @@ export class TransactionsService {
     if (request.endDate != undefined){
       queryParams = queryParams.append("endDate", request.endDate.toDateString())
     }
+    if (request.direction != undefined){
+      queryParams = queryParams.append("direction", request.direction)
+    }
+
 
     return this.http.get<IGetAnalyticsResponse>(url, {
       params : queryParams

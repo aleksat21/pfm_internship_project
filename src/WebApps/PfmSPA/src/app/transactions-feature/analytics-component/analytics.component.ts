@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
 import { formatDate, Location } from '@angular/common';
 import { TransactionsFacadeService } from 'src/app/domain/application-services/transactions-facade.service';
@@ -7,6 +7,10 @@ import { IGetCategoriesResponse } from 'src/app/domain/models/GetCategoriesModel
 import { CategorizeView } from 'src/app/domain/models/PostCategorizeModels/CategorizeView';
 import { CategoryView } from 'src/app/domain/models/GetCategoriesModels/CategoryView';
 import { MatTableDataSource } from '@angular/material/table';
+import { FormControl } from '@angular/forms';
+import {catchError, map, startWith, switchMap} from 'rxjs/operators';
+
+
 
 
 @Component({
@@ -14,13 +18,14 @@ import { MatTableDataSource } from '@angular/material/table';
   templateUrl: './analytics.component.html',
   styleUrls: ['./analytics.component.css']
 })
-export class AnalyticsComponent implements OnInit {
+export class AnalyticsComponent implements OnInit, AfterViewInit {
 
   public displayedColumns : string[] = ['catcode', 'count', 'amount']
   public dataSource = new MatTableDataSource<SingleCategoryAnalyticsView>()
   public dataSourceMap = new Map<string, MatTableDataSource<SingleCategoryAnalyticsView>>()
 
   public categoriesViewMap : Map<string, string> = new Map<string, string>()
+  directionControl = new FormControl('d');
 
   startDateQuery : Date
   endDateQuery : Date
@@ -35,6 +40,55 @@ export class AnalyticsComponent implements OnInit {
               private transcationService : TransactionsFacadeService
   )
   {}
+  ngAfterViewInit(): void {
+    this.directionControl.valueChanges.pipe(
+      startWith({}),
+      switchMap(() => {
+       return this.transcationService.getAnalyticsData(this.startDateQuery, this.endDateQuery, this.directionControl.value!)
+      }),
+      map(analyticsData => {
+        this.categoriesViewMap.clear()
+        if (analyticsData === null){
+          return []
+        }
+        return analyticsData
+      }))
+      .subscribe(analyticsData => {
+        this.transcationService.getAnalyticsData(this.startDateQuery, this.endDateQuery, this.directionControl.value!).subscribe(analyticsData => {
+          this.topTiesCategoriesData = analyticsData.filter(x => x.catcode >= 'A' && x.catcode <= 'Z')
+  
+          this.topTiesCategoriesData.forEach(topCategoryData => {
+            this.transcationService.getCategories(topCategoryData.catcode).subscribe((lowerCategoriesData : CategoryView[]) => {
+              var matTableData =  new MatTableDataSource<SingleCategoryAnalyticsView>();
+              matTableData.data = analyticsData.filter(ac => {
+                var haslowerCategoriesData : (CategoryView | undefined) = lowerCategoriesData.find(lc => lc.code == ac.catcode)
+                return haslowerCategoriesData != undefined
+              })
+              matTableData.data.sort((x1, x2) => {
+                if (x1.amount > x2.amount){
+                  return -1;
+                } else {
+                  return 1;
+                }
+              })
+              this.dataSourceMap.set(topCategoryData.catcode, matTableData )
+            })
+          });
+  
+          this.topTiesCategoriesData.sort((x1, x2) => {
+            if (x1.amount > x2.amount){
+              return -1;
+            } else{
+              return 1;
+            }       
+          }) 
+        })
+      })
+  } 
+
+  back(){
+    this.location.back();
+  }
 
   ngOnInit(): void {
     var data  = this.location.getState() as State
@@ -55,7 +109,7 @@ export class AnalyticsComponent implements OnInit {
         this.categoriesViewMap.set(category.code, category.name)
       })
 
-      this.transcationService.getAnalyticsData().subscribe(analyticsData => {
+      this.transcationService.getAnalyticsData(this.startDateQuery, this.endDateQuery, this.directionControl.value!).subscribe(analyticsData => {
         this.topTiesCategoriesData = analyticsData.filter(x => x.catcode >= 'A' && x.catcode <= 'Z')
 
         this.topTiesCategoriesData.forEach(topCategoryData => {

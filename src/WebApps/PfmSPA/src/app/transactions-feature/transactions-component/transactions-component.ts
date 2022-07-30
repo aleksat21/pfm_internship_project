@@ -24,7 +24,7 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
   public displayedColumns : string[] = ['id', 'beneficiaryName', 'date', 'direction', 'amount', 'description', 'currency', 'mcc', 'kind', 'catcode', 'action' ]
   public dataSource = new MatTableDataSource<TransactionView>()
 
-  public categoriesViewMap : Map<string, string> = new Map<string, string>()
+  public categoriesViewMap : Map<string, string> = new Map<string, string>();
   public directionViewMap : Map<string, string> = new Map<string, string>();
 
   categories : CategoryView[] = []

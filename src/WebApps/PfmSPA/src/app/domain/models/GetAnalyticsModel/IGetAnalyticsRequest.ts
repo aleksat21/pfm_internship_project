@@ -1,4 +1,5 @@
 export interface IGetAnalyticsRequest{
     startDate? : Date,
-    endDate? : Date
+    endDate? : Date,
+    direction? : string
 }

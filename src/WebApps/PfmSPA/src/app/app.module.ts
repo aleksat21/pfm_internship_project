@@ -26,6 +26,8 @@ import { SplitTransactionDetailsComponent } from './transactions-feature/split-t
 import {MatListModule} from '@angular/material/list';
 import { AnalyticsComponent } from './transactions-feature/analytics-component/analytics.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
 
 @NgModule({
   declarations: [
@@ -58,7 +60,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
     MatDatepickerModule,
     MatNativeDateModule,
     MatListModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatButtonToggleModule
   ],
   providers: [],
   bootstrap: [AppComponent]
