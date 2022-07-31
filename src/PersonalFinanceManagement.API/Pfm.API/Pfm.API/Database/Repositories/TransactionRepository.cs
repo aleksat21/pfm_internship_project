@@ -183,17 +183,16 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                 return ErrorHandling.CATEGORY_DOESNT_EXIST;
             }
 
-            var transaction = await _dbContext.Transactions.FindAsync(id);
+            var transaction = await _dbContext.Transactions.Include(x => x.SplitTransactions).Where(t => t.Id == id).FirstOrDefaultAsync();
             if (transaction == null)
             {
                 return ErrorHandling.TRANSACTION_DOESNT_EXIST;
             }
 
             // Nacin da se uklone splitovane transakcije
-            if (transaction.Catcode == "Z")
+            if (transaction.SplitTransactions.Count() > 0)
             {
-                var splitsToBeDeleted = await _dbContext.SplitTransactions.Where(st => st.Id == id).ToListAsync();
-                _dbContext.SplitTransactions.RemoveRange(splitsToBeDeleted);
+                _dbContext.SplitTransactions.RemoveRange(transaction.SplitTransactions);
                 await _dbContext.SaveChangesAsync();
             }
 

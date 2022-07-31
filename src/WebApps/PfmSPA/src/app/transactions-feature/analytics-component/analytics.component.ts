@@ -41,6 +41,18 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   )
   {}
   ngAfterViewInit(): void {
+    var data  = this.location.getState() as State
+    this.startDateQuery = data.startDate
+    this.endDateQuery = data.endDate
+
+    if (this.startDateQuery != undefined){
+      this.startDateString = formatDate(this.startDateQuery, 'dd-MM-yyyy', 'en-US')
+    }
+
+    if (this.endDateQuery != undefined){
+      this.endDateString = formatDate(this.endDateQuery, 'dd-MM-yyyy', 'en-US')
+    }
+
     this.directionControl.valueChanges.pipe(
       startWith({}),
       switchMap(() => {
@@ -71,11 +83,9 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   
                 var subcat_count = matTableData.data.map((x : SingleCategoryAnalyticsView) => x.count).reduce((accumulator, currentValue) => accumulator + currentValue)
                 var subcat_amount = matTableData.data.map((x : SingleCategoryAnalyticsView) => x.amount).reduce((accumulator, currentValue) => accumulator + currentValue)
-                console.log(this.categoriesViewMap.get(topCategoryData.catcode) ,subcat_amount, subcat_count)
 
                 var other : SingleCategoryAnalyticsView = {catcode : topCategoryData.catcode, amount : (total_amount - subcat_amount), count : (total_count - subcat_count)}
                 if (subcat_count != topCategoryData.count){
-                  console.log("nema " + topCategoryData.catcode)
                   matTableData.data.push(other)
                   matTableData._updateChangeSubscription()
                 }
@@ -108,57 +118,15 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    var data  = this.location.getState() as State
-    this.startDateQuery = data.startDate
-    this.endDateQuery = data.endDate
-
-    if (this.startDateQuery != undefined){
-      this.startDateString = formatDate(this.startDateQuery, 'dd-MM-yyyy', 'en-US')
-    }
-
-    if (this.endDateQuery != undefined){
-      this.endDateString = formatDate(this.endDateQuery, 'dd-MM-yyyy', 'en-US')
-    }
-
     this.transcationService.getCategories().subscribe((categoriesData : CategoryView[]) => {
-      
       categoriesData.forEach(category => {
         this.categoriesViewMap.set(category.code, category.name)
       })
-
-      this.transcationService.getAnalyticsData(this.startDateQuery, this.endDateQuery, this.directionControl.value!).subscribe(analyticsData => {
-        this.topTiesCategoriesData = analyticsData.filter(x => x.catcode >= 'A' && x.catcode <= 'Z')
-
-        this.topTiesCategoriesData.forEach(topCategoryData => {
-          this.transcationService.getCategories(topCategoryData.catcode).subscribe((lowerCategoriesData : CategoryView[]) => {
-            var matTableData =  new MatTableDataSource<SingleCategoryAnalyticsView>();
-            matTableData.data = analyticsData.filter(ac => {
-              var haslowerCategoriesData : (CategoryView | undefined) = lowerCategoriesData.find(lc => lc.code == ac.catcode)
-              return haslowerCategoriesData != undefined
-            })
-            matTableData.data.sort((x1, x2) => {
-              if (x1.amount > x2.amount){
-                return -1;
-              } else {
-                return 1;
-              }
-            })
-            this.dataSourceMap.set(topCategoryData.catcode, matTableData )
-          })
-        });
-
-        this.topTiesCategoriesData.sort((x1, x2) => {
-          if (x1.amount > x2.amount){
-            return -1;
-          } else{
-            return 1;
-          }       
-        }) 
-      })
     })
   }
-
 }
+
+
 
 interface State {
   startDate : Date,
