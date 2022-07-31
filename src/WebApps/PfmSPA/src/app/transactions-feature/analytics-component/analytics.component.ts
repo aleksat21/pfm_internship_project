@@ -48,7 +48,6 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
       }),
       map(analyticsData => {
         this.dataSourceMap.clear()
-        console.log(this.dataSourceMap)
         if (analyticsData === null){
           return []
         }
@@ -64,6 +63,24 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
                 var haslowerCategoriesData : (CategoryView | undefined) = lowerCategoriesData.find(lc => lc.code == ac.catcode)
                 return haslowerCategoriesData != undefined
               })
+
+              // add other row
+              if (matTableData.data.length > 0){
+                var total_amount = topCategoryData.amount
+                var total_count = topCategoryData.count
+  
+                var subcat_count = matTableData.data.map((x : SingleCategoryAnalyticsView) => x.count).reduce((accumulator, currentValue) => accumulator + currentValue)
+                var subcat_amount = matTableData.data.map((x : SingleCategoryAnalyticsView) => x.amount).reduce((accumulator, currentValue) => accumulator + currentValue)
+                console.log(this.categoriesViewMap.get(topCategoryData.catcode) ,subcat_amount, subcat_count)
+
+                var other : SingleCategoryAnalyticsView = {catcode : topCategoryData.catcode, amount : (total_amount - subcat_amount), count : (total_count - subcat_count)}
+                if (subcat_count != topCategoryData.count){
+                  console.log("nema " + topCategoryData.catcode)
+                  matTableData.data.push(other)
+                  matTableData._updateChangeSubscription()
+                }
+              }
+
               matTableData.data.sort((x1, x2) => {
                 if (x1.amount > x2.amount){
                   return -1;
