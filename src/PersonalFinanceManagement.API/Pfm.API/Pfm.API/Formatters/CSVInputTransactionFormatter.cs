@@ -84,19 +84,18 @@ namespace PersonalFinanceManagement.API.Formatters
                         transactionList.Transactions.Add(new CreateTransactionDTO
                         {
                             Id = id,
-                            BeneficiaryName = beneficiaryName,
+                            BeneficiaryName = !String.IsNullOrEmpty(beneficiaryName) ? beneficiaryName : null,
                             Date = DateTime.Parse(date),
                             Direction = Enum.Parse<Direction>(direction),
                             Amount = double.Parse(amount),
-                            Description = description,
+                            Description = !String.IsNullOrEmpty(description) ? description: null,
                             Currency = currency,
-                            Mcc = mcc,
+                            Mcc = !String.IsNullOrEmpty(mcc) ? mcc : null,
                             Kind = Enum.Parse<Kind>(kind.Trim())
                         });
                     }
 
                     return await InputFormatterResult.SuccessAsync(transactionList);
-
                 }
             }
             catch

@@ -47,16 +47,16 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
        return this.transcationService.getAnalyticsData(this.startDateQuery, this.endDateQuery, this.directionControl.value!)
       }),
       map(analyticsData => {
-        this.categoriesViewMap.clear()
+        this.dataSourceMap.clear()
+        console.log(this.dataSourceMap)
         if (analyticsData === null){
           return []
         }
         return analyticsData
       }))
       .subscribe(analyticsData => {
-        this.transcationService.getAnalyticsData(this.startDateQuery, this.endDateQuery, this.directionControl.value!).subscribe(analyticsData => {
           this.topTiesCategoriesData = analyticsData.filter(x => x.catcode >= 'A' && x.catcode <= 'Z')
-  
+
           this.topTiesCategoriesData.forEach(topCategoryData => {
             this.transcationService.getCategories(topCategoryData.catcode).subscribe((lowerCategoriesData : CategoryView[]) => {
               var matTableData =  new MatTableDataSource<SingleCategoryAnalyticsView>();
@@ -82,8 +82,8 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
               return 1;
             }       
           }) 
-        })
       })
+      
   } 
 
   back(){

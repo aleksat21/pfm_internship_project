@@ -63,7 +63,7 @@ namespace PersonalFinanceManagement.API.Formatters
                         categoryList.Categories.Add(new CreateCategoryDTO
                         {
                             Code = code,
-                            ParentCode = parentCode,
+                            ParentCode = !String.IsNullOrEmpty(parentCode) ? parentCode : null,
                             Name = name
                         });
 
