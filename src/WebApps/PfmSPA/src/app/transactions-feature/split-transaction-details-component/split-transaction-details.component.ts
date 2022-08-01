@@ -47,6 +47,8 @@ export class SplitTransactionDetailsComponent implements OnInit, AfterViewInit {
   splits : SingleTransactionWithSplitView[] = []
 
   public categoriesViewMap : Map<string, string> = new Map<string, string>();
+  public directionViewMap : Map<string, string> = new Map<string, string>();
+  public kindViewMap : Map<string, string> = new Map<string, string>();
 
   constructor(    
     private activatedRoute: ActivatedRoute,
@@ -54,14 +56,32 @@ export class SplitTransactionDetailsComponent implements OnInit, AfterViewInit {
     private location: Location
     ) { }
 
+
   back(){
     this.location.back()
   }
   ngAfterViewInit(): void {
-
+    var data  = this.location.getState() as State
+    this.amount = data.amount
+    this.beneficiaryName = data.beneficiaryName
+    this.category  = data.catcode
+    this.currency = data.currency
+    this.date = data.date
+    this.description = data.description
+    this.direction = data.direction
+    this.kind = data.kind
+    this.mcc = data.mcc
+    this.splits = data.splits
   }
 
   ngOnInit(): void {
+    this.kinds.forEach((kind : Kind) => {
+      this.kindViewMap.set(kind.value, kind.viewValue)
+    })
+
+    this.directionViewMap.set("d", "Debits")
+    this.directionViewMap.set("c", "Credits")
+
     this.activatedRoute.params.subscribe((params) => {
       this.transactionId = params['transactionId']
     })
@@ -69,29 +89,22 @@ export class SplitTransactionDetailsComponent implements OnInit, AfterViewInit {
     this.transactionsService.getCategories().subscribe((data : CategoryView[]) => {
         data.forEach(cat => {
           this.categoriesViewMap.set(cat.code, cat.name)
-        })
-
-        this.transactionsService.getTransactionDetails(this.transactionId).subscribe((data : IGetTransactionWithSplitsResponse) => {
-        this.category = "Split"
-      
-        this.amount = data.amount
-        this.beneficiaryName = data.beneficiaryName
-        this.currency = data.currency
-        this.description = data.description
-        
-        this.direction = data.direction == 'd' ? "Debits" : "Credits"
-        this.date = formatDate(data.date, 'dd-MM-yyyy', 'en-us')
-        
-        let kind_detail  = this.kinds.find(f => f.value == data.kind)!
-        this.kind = kind_detail.viewValue
-  
-        this.mcc = data.mcc
-  
-        this.splits = data.splits
-      })
-    
+        })    
     }) 
   }
+}
+
+interface State{
+  date : string,
+  direction : string,
+  amount : number,
+  currency : string,
+  mcc : string,
+  description : string,
+  kind : string,
+  catcode : string,
+  beneficiaryName : string,
+  splits : SingleTransactionWithSplitView[]
 }
 
 interface Kind {

@@ -26,6 +26,8 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
 
   public categoriesViewMap : Map<string, string> = new Map<string, string>();
   public directionViewMap : Map<string, string> = new Map<string, string>();
+  public kindViewMap : Map<string, string> = new Map<string, string>();
+
 
   categories : CategoryView[] = []
 
@@ -84,8 +86,31 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
   ) { }
 
 
-  public showTransactionDetails(transactionId: string) {
-    this.router.navigate(['transactions/categorize/' + transactionId]);
+  public showTransactionDetails(
+    transactionId: string,
+    date : string,
+    direction: string,
+    amount : number,
+    currency : string,
+    mcc : string,
+    description? : string,
+    kind? : string,
+    catcode? : string,
+    beneficiaryName? : string
+  ) {
+    var url : string = 'transactions/categorize/' + transactionId  
+    this.router.navigateByUrl(url, {state : {
+      date,
+      direction,
+      amount,
+      currency,
+      mcc,
+      description,
+      kind,
+      catcode,
+      beneficiaryName 
+    }})
+    // this.router.navigate(['transactions/categorize/' + transactionId]);
   }
 
   public showAnalyticsData(){
@@ -99,6 +124,10 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
         this.categoriesViewMap.set(cat.code, cat.name)
       })
       console.log(this.categoriesViewMap)
+    })
+
+    this.kinds.forEach((kind : Kind) => {
+      this.kindViewMap.set(kind.value, kind.viewValue)
     })
 
     this.directionViewMap.set("d", "Debits")

@@ -35,8 +35,6 @@ namespace PersonalFinanceManagement.API.Services
             string? catCode);
 
         Task SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand);
-
-        Task<TransactionWithSplits> GetTransactionDetails(string id);
         Task AutoCategorize();
     }
 }

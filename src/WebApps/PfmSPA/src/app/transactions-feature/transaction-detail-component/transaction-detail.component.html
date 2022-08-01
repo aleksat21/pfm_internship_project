@@ -1,6 +1,50 @@
 <mat-card class="user-card">
     <mat-card-title>Categorize transaction</mat-card-title>
-    <mat-card-subtitle>ID : {{transactionId}}</mat-card-subtitle>
+    <mat-card-subtitle>
+      <mat-nav-list class="list-horizontal">
+        
+        <mat-list-item>
+          ID : {{transactionId}}
+        </mat-list-item>
+
+        <mat-list-item>
+          Amount : {{amount}}
+        </mat-list-item>
+
+        <mat-list-item>
+          Beneficary: {{beneficiaryName}}
+        </mat-list-item>
+
+        <mat-list-item>
+          Current category : {{categoriesViewMap.get(category)}}
+        </mat-list-item>
+
+        <mat-list-item>
+          Currency : {{currency}}
+        </mat-list-item>
+
+        <mat-list-item>
+          date : {{date}}
+        </mat-list-item>
+
+        <mat-list-item>
+          Description : {{description}}
+        </mat-list-item>
+
+        <mat-list-item>
+          Direction : {{directionViewMap.get(direction)}}
+        </mat-list-item>
+
+        <mat-list-item>
+          Kind : {{kindViewMap.get(kind)}}
+        </mat-list-item>
+        
+        <mat-list-item>
+          Mcc : {{mcc}}
+        </mat-list-item>
+
+      </mat-nav-list>
+    </mat-card-subtitle>
     <mat-card-content>
         <form [formGroup] = "fgTopCategory">
             <mat-form-field appearance="fill">

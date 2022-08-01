@@ -1,3 +1,9 @@
 #back-button{
     margin-top: 200px;
 }
+
+mat-nav-list.list-horizontal .mat-list-item {
+    display: inline-block;
+    height: auto;
+    width: auto;
+}

@@ -32,8 +32,6 @@ namespace PersonalFinanceManagement.API.Database.Repositories
         Task<SpendingByCategory> GetAnalytics(DateTime startDate, DateTime endDate, Direction direction, string? catCode);
 
         Task<ErrorHandling> SplitTransaction(string id, SplitTransactionCommand splitTransactionCommand);
-
-        Task<TransactionEntity> GetTransactionDetails(string id);
         Task AutoCategorize();
     }
 }

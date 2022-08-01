@@ -326,14 +326,6 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             return ErrorHandling.OK;
         }
 
-        public async Task<TransactionEntity> GetTransactionDetails(string id)
-        {
-            var transaction_query = _dbContext.Transactions.Include(t => t.SplitTransactions).AsQueryable();
-            var transaction = await transaction_query.Where(t => t.Id == id).FirstOrDefaultAsync();
-
-            return transaction;
-        }
-
         public async Task AutoCategorize()
         {
             foreach (var rule in _rulesConfig.Rules)

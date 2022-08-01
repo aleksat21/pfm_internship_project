@@ -113,14 +113,6 @@ namespace PersonalFinanceManagement.API.Controllers
             return Ok();
         }
 
-        [HttpGet]
-        [Route("transaction/{id}")]
-        public async Task<ActionResult<TransactionWithSplits>> GetTransactionDetails([FromRoute] string id)
-        {
-            var result = await _serviceTransactions.GetTransactionDetails(id);
-            return Ok(result);
-        }
-
         [HttpPost]
         [Route("transaction/auto-categorize")]
         public async Task<ActionResult<string>> AutoCategorize()
