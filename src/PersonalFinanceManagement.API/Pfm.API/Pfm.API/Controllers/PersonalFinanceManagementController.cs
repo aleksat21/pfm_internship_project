@@ -115,10 +115,10 @@ namespace PersonalFinanceManagement.API.Controllers
 
         [HttpPost]
         [Route("transaction/auto-categorize")]
-        public async Task<ActionResult<string>> AutoCategorize()
+        public async Task<ActionResult<int>> AutoCategorize()
         {
-            await _serviceTransactions.AutoCategorize();
-            return Ok();
+            var result = await _serviceTransactions.AutoCategorize();
+            return Ok(result);
         }
 
 

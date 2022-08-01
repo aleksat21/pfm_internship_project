@@ -106,9 +106,9 @@ namespace PersonalFinanceManagement.API.Services
             }
         }
 
-        public async Task AutoCategorize()
+        public async Task<int> AutoCategorize()
         {
-            await _transactionRepository.AutoCategorize();
+            return await _transactionRepository.AutoCategorize();
         }
     }
 }

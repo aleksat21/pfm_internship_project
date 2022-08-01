@@ -331,8 +331,9 @@ namespace PersonalFinanceManagement.API.Database.Repositories
             return ErrorHandling.OK;
         }
 
-        public async Task AutoCategorize()
+        public async Task<int> AutoCategorize()
         {
+            var rows_affected = 0;
             foreach (var rule in _rulesConfig.Rules)
             {
                 var title = rule.Title;
@@ -340,8 +341,9 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                 var predicate = rule.Predicate;
 
                 var query = $"UPDATE DBO.TRANSACTIONS SET CATCODE = {catcode} WHERE {predicate} AND CATCODE IS NULL";
-                await _dbContext.Database.ExecuteSqlRawAsync(query);
+                rows_affected += await _dbContext.Database.ExecuteSqlRawAsync(query);
             }
+            return rows_affected;
         }
     }
 }

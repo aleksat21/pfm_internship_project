@@ -9,6 +9,66 @@
       "title": "When mcc is 5811 (Caterers) categorize transaction as 39 (Food & Dining / Restaurants)",
       "catcode": "39",
       "predicate": "MCC = 5811"
+    },
+    {
+      "title": "When mcc is 8299 (Schools and Educational Services ( Not Elsewhere Classified)) categorize transaction as 17 (Tuition)",
+      "catcode": "17",
+      "predicate": "MCC = 8299"
+    },
+    {
+      "title": "When mcc is 7394 (Equipment Rental and Leasing Services...) categorize transaction as 3 (Auto Leasing)",
+      "catcode": "3",
+      "predicate": "MCC = 7394"
+    },
+    {
+      "title": "When mcc is 7523 (Automobile parking lots and Garages) categorize transaction as 5 (Parking)",
+      "catcode": "5",
+      "predicate": "MCC = 7523"
+    },
+    {
+      "title": "When description is phone bill categorize transatction as 9 (Home Phone)",
+      "catcode": "9",
+      "predicate": "LOWER(DESCRIPTION) = 'phone bill'"
+    },
+    {
+      "title": "When description is internet bill categorize transatction as 19 (Internet)",
+      "catcode": "10",
+      "predicate": "LOWER(DESCRIPTION) LIKE '%internet bill%'"
+    },
+    {
+      "title": "When description is mobile phone bill categorize transatction as 11 (Mobile phone)",
+      "catcode": "11",
+      "predicate": "LOWER(DESCRIPTION) LIKE '%mobile phone bill%'"
+    },
+    {
+      "title": "When description is mobile television bill categorize transatction as 12 (Television)",
+      "catcode": "12",
+      "predicate": "LOWER(DESCRIPTION) LIKE '%television bill%'"
+    },
+    {
+      "title": "When description is utilities payment categorize transatction as 13 (Utilities)",
+      "catcode": "13",
+      "predicate": "LOWER(DESCRIPTION) LIKE '%utilities%'"
+    },
+    {
+      "title": "When beneficiary name contains netflix or hulu categorize transatction as 21 (Movies & DVD's')",
+      "catcode": "21",
+      "predicate": "LOWER(BeneficiaryName) LIKE '%netflix%' OR LOWER(BeneficiaryName) LIKE '%hulu %'"
+    },
+    {
+      "title": "When beneficiary name is apple or spotify categorize transatction as 22 (Music)",
+      "catcode": "22",
+      "predicate": "LOWER(BeneficiaryName) ='apple' OR LOWER(BeneficiaryName) ='spotify'"
+    },
+    {
+      "title": "When mcc code is 5192 categorize transatction as 23 (Newspapers & Magazines)",
+      "catcode": "23",
+      "predicate": "MCC = 5192"
+    },
+    {
+      "title": "When description containts ATM categorize transatction as 25 (ATM Fee)",
+      "catcode": "25",
+      "predicate": "Description LIKE '%ATM %'"
     }
   ]
 }
