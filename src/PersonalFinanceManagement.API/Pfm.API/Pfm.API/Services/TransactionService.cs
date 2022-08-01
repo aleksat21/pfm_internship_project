@@ -7,6 +7,7 @@ using PersonalFinanceManagement.API.Database.Repositories;
 using PersonalFinanceManagement.API.Models.Analytics;
 using PersonalFinanceManagement.API.Models.Categories;
 using PersonalFinanceManagement.API.Models.ExceptionHandling;
+using PersonalFinanceManagement.API.Models.ExceptionHandling.Exceptions.DomainExceptions;
 using PersonalFinanceManagement.API.Models.Exceptions.DomainExceptions;
 using PersonalFinanceManagement.API.Models.Pages;
 using PersonalFinanceManagement.API.Models.SortOrders;
@@ -98,6 +99,8 @@ namespace PersonalFinanceManagement.API.Services
                     var splitAmount = splitTransactionCommand.splits.Select(s => s.Amount).Sum();
                     var totalAmount = SplitTransactionOverAmountValue.totalTransactionValue;
                     throw new SplitTransactionOverLimitException(splitAmount, totalAmount);
+                case ErrorHandling.SINGLE_SPLIT_TRANSACTION:
+                    throw new SingleSplitTransactionException();
                 default:
                     break;
             }
