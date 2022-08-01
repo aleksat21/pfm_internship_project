@@ -65,7 +65,8 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
     {viewValue : "Direction", value : "direction"},
     {viewValue : "Description", value : "description"},
     {viewValue : "Currency", value : "currency"},
-    {viewValue : "Kind", value : "kind"}
+    {viewValue : "Kind", value : "kind"},
+    {viewValue : "Amount", value: "amount"}
   ]
 
   fgOrderByDirection : FormGroup

@@ -40,6 +40,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
               private transcationService : TransactionsFacadeService
   )
   {}
+  
   ngAfterViewInit(): void {
     var data  = this.location.getState() as State
     this.startDateQuery = data.startDate
@@ -71,6 +72,7 @@ export class AnalyticsComponent implements OnInit, AfterViewInit {
           this.topTiesCategoriesData.forEach(topCategoryData => {
             this.transcationService.getCategories(topCategoryData.catcode).subscribe((lowerCategoriesData : CategoryView[]) => {
               var matTableData =  new MatTableDataSource<SingleCategoryAnalyticsView>();
+
               matTableData.data = analyticsData.filter(ac => {
                 var haslowerCategoriesData : (CategoryView | undefined) = lowerCategoriesData.find(lc => lc.code == ac.catcode)
                 return haslowerCategoriesData != undefined

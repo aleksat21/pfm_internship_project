@@ -98,6 +98,9 @@ namespace PersonalFinanceManagement.API.Database.Repositories
                     case "kind":
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Kind) : query.OrderByDescending(x => x.Kind);
                         break;
+                    case "amount":
+                        query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Amount) : query.OrderByDescending(x => x.Amount);
+                        break;
                     default:
                         query = sortOrder == SortOrder.Asc ? query.OrderBy(x => x.Id) : query.OrderByDescending(x => x.Date);
                         break;

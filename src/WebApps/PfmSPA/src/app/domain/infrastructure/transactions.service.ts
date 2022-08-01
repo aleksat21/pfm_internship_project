@@ -61,7 +61,9 @@ export class TransactionsService {
     if (request.direction != undefined){
       queryParams = queryParams.append("direction", request.direction)
     }
-
+    if (request.catcode != undefined){
+      queryParams = queryParams.append("catCode", request.catcode)
+    }
 
     return this.http.get<IGetAnalyticsResponse>(url, {
       params : queryParams
