@@ -28,7 +28,6 @@ export class TransactionsComponent implements AfterViewInit, OnInit{
   public directionViewMap : Map<string, string> = new Map<string, string>();
   public kindViewMap : Map<string, string> = new Map<string, string>();
 
-
   categories : CategoryView[] = []
 
   resultsLength = 0;
