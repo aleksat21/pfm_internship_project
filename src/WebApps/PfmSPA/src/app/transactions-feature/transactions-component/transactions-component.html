@@ -126,11 +126,11 @@
               </ng-container>
 
               <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef> Select category / Split transaction</th>
+                <th mat-header-cell *matHeaderCellDef> Select category </th>
                 <td mat-cell *matCellDef="let element">
                     <button mat-button color="primary"
                         (click)="showTransactionDetails(element.id, element.date, element.direction, element.amount, element.currency, element.mcc, element.description, element.kind, element.catcode, element.beneficiaryName)" aria-label="Example icon button with a bookmark icon">
-                        Category / Split
+                        Categorize
                     </button>
                 </td>
               </ng-container>
